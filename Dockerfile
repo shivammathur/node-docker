@@ -95,7 +95,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && savedAptMark="$(apt-mark showmanual)" \
       && apt-mark auto '.*' > /dev/null \
       && apt-get update && apt-get install -y sudo curl lsb-release software-properties-common unzip --no-install-recommends \
-      && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php \
+      && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php && apt-get update \
       && for v in 5.6 7.0 7.1 7.2 7.3 7.4; do \
            DEBIAN_FRONTEND=noninteractive apt-get install -y php"$v" \
            php"$v"-dev \
