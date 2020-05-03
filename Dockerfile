@@ -127,4 +127,4 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && php7.4 -v; \
     fi
 
-ENTRYPOINT [ "/bin/bash" ]
+CMD [ "/bin/bash" ]
