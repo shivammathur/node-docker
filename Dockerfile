@@ -2,6 +2,7 @@ FROM ubuntu:bionic
 MAINTAINER Shivam Mathur "shivam_jpr@hotmail.com"
 ARG type
 ENV NODE_VERSION 12.16.3
+ENV YARN_VERSION 1.22.4
 ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
 ENV RUNNER_TOOL_CACHE "/opt/hostedtoolcache"
 ENV runner "self-hosted"
@@ -57,11 +58,9 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
     && node --version \
     && npm --version
 
-ENV YARN_VERSION 1.22.4
-
 RUN set -ex \
   && savedAptMark="$(apt-mark showmanual)" \
-  && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr xz-utils libatomic1 --no-install-recommends \
+  && apt-get update && apt-get install -y ca-certificates sudo make curl wget gnupg dirmngr xz-utils libatomic1 --no-install-recommends \
   && rm -rf /var/lib/apt/lists/* \
   && for key in \
     6A010C5166006599AA17F08146C2130DFD2497F5 \
@@ -73,12 +72,13 @@ RUN set -ex \
   && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
   && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc" \
   && gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
-  && mkdir -p /opt && mkdir -p /opt/hostedtoolcache \
+  && mkdir -p -m 777 /opt /opt/hostedtoolcache \
   && tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/ \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
   && apt-mark auto '.*' > /dev/null \
+  && apt-mark manual sudo make \
   && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
   && find /usr/local -type f -executable -exec ldd '{}' ';' \
     | awk '/=>/ { print $(NF-1) }' \
@@ -94,7 +94,7 @@ RUN set -ex \
 RUN if [ "$type" = "full" ]; then set -ex \
       && savedAptMark="$(apt-mark showmanual)" \
       && apt-mark auto '.*' > /dev/null \
-      && apt-get update && apt-get install -y sudo curl lsb-release software-properties-common unzip --no-install-recommends \
+      && apt-get update && apt-get install -y curl lsb-release software-properties-common unzip --no-install-recommends \
       && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php && apt-get update \
       && for v in 5.6 7.0 7.1 7.2 7.3 7.4; do \
            DEBIAN_FRONTEND=noninteractive apt-get install -y php"$v" \
@@ -126,11 +126,5 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && php7.3 -v \
       && php7.4 -v; \
     fi
-
-RUN groupadd --gid 1000 runner \
-  && useradd --uid 1000 --gid runner --shell /bin/bash --create-home runner
-
-USER runner
-WORKDIR /home/runner
 
 ENTRYPOINT [ "/bin/bash" ]
