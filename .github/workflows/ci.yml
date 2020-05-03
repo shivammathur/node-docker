@@ -1,0 +1,42 @@
+name: Build
+on:
+  push:
+  pull_request:
+  repository_dispatch:
+jobs:
+  build:
+    name: Build
+    strategy:
+      matrix:
+        tags:
+          - "latest, bionic, 1804"
+          - "xenial, 1604"
+          - "latest-slim, bionic-slim, 1804-slim"
+          - "xenial-slim, 1604-slim"
+        include:
+          -  tags: "latest, bionic, 1804"
+             build_args: "type=full"
+             cache_froms: "ubuntu:bionic"
+          -  tags: "xenial, 1604"
+             build_args: "type=full"
+             cache_froms: "ubuntu:xenial"
+          -  tags: "latest-slim, bionic-slim, 1804-slim"
+             build_args: "type=slim"
+             cache_froms: "ubuntu:bionic"
+          -  tags: "xenial-slim, 1604-slim"
+             build_args: "type=slim"
+             cache_froms: "ubuntu:xenial"
+    runs-on: ubuntu-latest
+    steps:        
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.docker_username }}
+          password: ${{ secrets.docker_password }}
+          repository: shivammathur/node
+          tags: ${{ matrix.tags }}
+          build_args: ${{ matrix.build_args }}
+          cache_froms: ${{ matrix.cache_froms }}
