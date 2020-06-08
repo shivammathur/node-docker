@@ -11,8 +11,10 @@ jobs:
         tags:
           - "latest, bionic, 1804"
           - "xenial, 1604"
+          - "focal, 2004"
           - "latest-slim, bionic-slim, 1804-slim"
           - "xenial-slim, 1604-slim"
+          - "focal-slim, 2004-slim"
         include:
           -  tags: "latest, bionic, 1804"
              build_args: "type=full"
@@ -20,12 +22,18 @@ jobs:
           -  tags: "xenial, 1604"
              build_args: "type=full"
              base: "ubuntu:xenial"
+          -  tags: "focal, 2004"
+             build_args: "type=full"
+             base: "ubuntu:focal"
           -  tags: "latest-slim, bionic-slim, 1804-slim"
              build_args: "type=slim"
              base: "ubuntu:bionic"
           -  tags: "xenial-slim, 1604-slim"
              build_args: "type=slim"
              base: "ubuntu:xenial"
+          -  tags: "focal-slim, 2004-slim"
+             build_args: "type=slim"
+             base: "ubuntu:focal"
     runs-on: ubuntu-latest
     steps:        
       - name: Checkout

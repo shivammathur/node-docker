@@ -1,7 +1,7 @@
 FROM ubuntu:bionic
 MAINTAINER Shivam Mathur "shivam_jpr@hotmail.com"
 ARG type
-ENV NODE_VERSION 12.16.3
+ENV NODE_VERSION 12.18.0
 ENV YARN_VERSION 1.22.4
 ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
 ENV RUNNER_TOOL_CACHE "/opt/hostedtoolcache"
