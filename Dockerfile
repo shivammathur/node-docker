@@ -1,7 +1,7 @@
 FROM ubuntu:bionic
 MAINTAINER Shivam Mathur "shivam_jpr@hotmail.com"
 ARG type
-ENV NODE_VERSION 12.18.3
+ENV NODE_VERSION 12.18.4
 ENV YARN_VERSION 1.22.4
 ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
 ENV RUNNER_TOOL_CACHE "/opt/hostedtoolcache"
@@ -30,6 +30,7 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
     C82FA3AE1CBEDC6BE46B9360C43CEC45C17AB93C \
     DD8F2338BAE7501E3DD5AC78C273792F7D83545D \
     A48C2BEE680E841632CD4E44F07496B3EB3C1762 \
+    108F52B48DB57BB0CC439B2997B01419BD92F80A \
     B9E2F5981AA6E0CD28160D9FF13993A75599653C \
   ; do \
     gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
