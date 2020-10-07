@@ -8,6 +8,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        platform:
+          - "linux/386"
+          - "linux/amd64"
+          - "linux/arm/v7"
+          - "linux/arm64"
+          - "multi"
         tags:
           - "latest, bionic, 1804"
           - "xenial, 1604"
@@ -18,45 +24,66 @@ jobs:
         include:
           -  tags: "latest, bionic, 1804"
              build_args: "type=full"
-             base: "ubuntu:bionic"
+             base: "ubuntu:18.04"
+             file: bionic
           -  tags: "xenial, 1604"
              build_args: "type=full"
-             base: "ubuntu:xenial"
+             base: "ubuntu:16.04"
+             file: xenial
           -  tags: "focal, 2004"
              build_args: "type=full"
-             base: "ubuntu:focal"
+             base: "ubuntu:20.04"
+             file: focal
           -  tags: "latest-slim, bionic-slim, 1804-slim"
              build_args: "type=slim"
-             base: "ubuntu:bionic"
+             base: "ubuntu:18.04"
+             file: bionic
           -  tags: "xenial-slim, 1604-slim"
              build_args: "type=slim"
-             base: "ubuntu:xenial"
+             base: "ubuntu:16.04"
+             file: xenial
           -  tags: "focal-slim, 2004-slim"
              build_args: "type=slim"
-             base: "ubuntu:focal"
+             base: "ubuntu:20.04"
+             file: focal
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Change base
-        run: sed -i 's/ubuntu:bionic/${{ matrix.base }}/g' Dockerfile
-
       - name: Prep
         id: prep
+        continue-on-error: true
         run: |
+          platform=$(echo "${{ matrix.platform }}" | cut -d '/' -f 2-3)
+          case $platform in
+            386)
+              [ "${{ matrix.file }}" = "focal" ] && echo "386 not supported on focal" && exit 1
+              platform='i386'
+            ;;
+            arm64) platform='arm64v8' ;;
+            arm/v7) platform='arm32v7' ;;
+          esac
           tags=$(echo ${{ matrix.tags }} | awk 'BEGIN{FS=OFS=", "} NR==1{for (i=1;i<=NF;i++) $i="shivammathur/node:"$i} 1')
-          key=$(echo -n "$tags" | openssl dgst -sha256 | cut -d ' ' -f 2)
+          ptags=$(echo ${{ matrix.tags }} | awk -v platform="$platform" 'BEGIN{FS=OFS=", "} NR==1{for (i=1;i<=NF;i++) $i="shivammathur/node:"$i"-"platform} 1')
+          key=$(echo -n "$tags $ptags" | openssl dgst -sha256 | cut -d ' ' -f 2)
+          multi='linux/amd64,linux/arm/v7,linux/arm64'
+          [ ! "${{ matrix.file }}" = "focal" ] && multi="linux/386,$multi"
           echo ::set-output name=tags::${tags}
+          echo ::set-output name=ptags::${ptags}
           echo ::set-output name=key::${key}
+          echo ::set-output name=multi::${multi}
 
       - name: Set up Docker Buildx
+        if: steps.prep.outcome == 'success'
         uses: docker/setup-buildx-action@v1
 
       - name: Set up QEMU
+        if: steps.prep.outcome == 'success'
         uses: docker/setup-qemu-action@v1
 
       - name: Cache Docker layers
+        if: steps.prep.outcome == 'success'
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
@@ -69,16 +96,26 @@ jobs:
           username: ${{ secrets.docker_username }}
           password: ${{ secrets.docker_password }}
 
-      - name: Build
-        id: build
+      - name: Build Multiarch
+        if: matrix.platform == 'multi' && steps.prep.outcome == 'success'
         uses: docker/build-push-action@v2
         with:
           push: true
-          platforms: linux/386,linux/amd64,linux/arm/v7,linux/arm64
+          file: ./Dockerfile_${{ matrix.file }}
+          platforms: ${{ steps.prep.outputs.multi }}
           tags: ${{ steps.prep.outputs.tags }}
           build-args: ${{ matrix.build_args }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 
-      - name: Image digest
-        run: echo ${{ steps.build.outputs.digest }}
+      - name: Build specific arch
+        if: matrix.platform != 'multi' && steps.prep.outcome == 'success'
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          file: ./Dockerfile_${{ matrix.file }}
+          platforms: ${{ matrix.platform }}
+          tags: ${{ steps.prep.outputs.ptags }}
+          build-args: ${{ matrix.build_args }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache

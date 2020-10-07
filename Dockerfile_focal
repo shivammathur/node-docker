@@ -1,0 +1,102 @@
+FROM ubuntu:focal
+ARG type
+ENV NODE_VERSION 12.18.4
+ENV NODE_VERSION_x86 12.16.3
+ENV YARN_VERSION 1.22.4
+ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
+ENV RUNNER_TOOL_CACHE "/opt/hostedtoolcache"
+ENV runner "self-hosted"
+
+RUN ARCH= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --print-architecture)" \
+  && case "${dpkgArch##*-}" in \
+    amd64) ARCH='x64';; \
+    ppc64el) ARCH='ppc64le';; \
+    s390x) ARCH='s390x';; \
+    arm64) ARCH='arm64';; \
+    armhf) ARCH='armv7l';; \
+    i386) ARCH='x86'; PREFIX='unofficial-builds'; URLPATH='download/release'; NODE_VERSION=$NODE_VERSION_x86;; \
+    *) echo "unsupported architecture"; exit 1 ;; \
+  esac \
+  && set -ex \
+  # libatomic1 for arm
+  && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr xz-utils libatomic1 --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/* \
+  && curl -fsSLO --compressed "https://$PREFIX.nodejs.org/$URLPATH/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
+  && tar -xJf "node-v$NODE_VERSION-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
+  && rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
+  && apt-mark auto '.*' > /dev/null \
+  && apt-mark manual libatomic1 \
+  && find /usr/local -type f -executable -exec ldd '{}' ';' \
+    | awk '/=>/ { print $(NF-1) }' \
+    | sort -u \
+    | xargs -r dpkg-query --search \
+    | cut -d: -f1 \
+    | sort -u \
+    | xargs -r apt-mark manual \
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
+  # smoke tests
+  && node --version \
+  && npm --version
+
+RUN set -ex \
+  && savedAptMark="$(apt-mark showmanual)" \
+  && apt-get update && apt-get install -y ca-certificates sudo make curl wget gnupg dirmngr xz-utils libatomic1 --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/* \
+  && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
+  && mkdir -p -m 777 /opt /opt/hostedtoolcache \
+  && tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/ \
+  && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
+  && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
+  && rm yarn-v$YARN_VERSION.tar.gz \
+  && apt-mark auto '.*' > /dev/null \
+  && apt-mark manual libatomic1 sudo make \
+  && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
+  && find /usr/local -type f -executable -exec ldd '{}' ';' \
+    | awk '/=>/ { print $(NF-1) }' \
+    | sort -u \
+    | xargs -r dpkg-query --search \
+    | cut -d: -f1 \
+    | sort -u \
+    | xargs -r apt-mark manual \
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  # smoke test
+  && yarn --version
+
+RUN if [ "$type" = "full" ]; then set -ex \
+      && savedAptMark="$(apt-mark showmanual)" \
+      && apt-mark auto '.*' > /dev/null \
+      && apt-get update && apt-get install -y curl lsb-release software-properties-common unzip --no-install-recommends \
+      && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php && apt-get update \
+      && for v in 5.6 7.0 7.1 7.2 7.3 7.4; do \
+           DEBIAN_FRONTEND=noninteractive apt-get install -y php"$v" \
+           php"$v"-dev \
+           php"$v"-curl \
+           php"$v"-mbstring \
+           php"$v"-xml \
+           php"$v"-intl \
+           php"$v"-mysql \
+           php"$v"-pgsql \
+           php"$v"-zip \
+           php-xdebug; \
+         done \
+      && rm -rf /var/lib/apt/lists/* \
+      && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
+      && find /usr/local -type f -executable -exec ldd '{}' ';' \
+        | awk '/=>/ { print $(NF-1) }' \
+        | sort -u \
+        | xargs -r dpkg-query --search \
+        | cut -d: -f1 \
+        | sort -u \
+        | xargs -r apt-mark manual \
+      && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+      # smoke test
+      && php5.6 -v \
+      && php7.0 -v \
+      && php7.1 -v \
+      && php7.2 -v \
+      && php7.3 -v \
+      && php7.4 -v; \
+    fi
+
+CMD [ "/bin/bash" ]
