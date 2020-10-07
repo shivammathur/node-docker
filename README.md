@@ -56,7 +56,8 @@ https://hub.docker.com/r/shivammathur/node
 
 ## Platform/OS Architecture specific tags
 
-Suffix `amd64`, `i386`, `arm32v7` `arm64v8` to above image variants to get image for specific OS architecture.
+- Suffix `amd64`, `i386`, `arm32v7` `arm64v8` to above image variants to get image for specific OS architecture.
+- `i386` is not available for focal based images, namely `focal`, `20.04`, `focal-slim` and `20.04-slim`.
 
 For example `shivammathur/node:bionic-arm64v8`.
 
