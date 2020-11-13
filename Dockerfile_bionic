@@ -1,8 +1,8 @@
 FROM ubuntu:bionic
 ARG type
-ENV NODE_VERSION 12.18.4
+ENV NODE_VERSION 14.15.0
 ENV NODE_VERSION_x86 12.16.3
-ENV YARN_VERSION 1.22.4
+ENV YARN_VERSION 1.22.5
 ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
 ENV RUNNER_TOOL_CACHE "/opt/hostedtoolcache"
 ENV runner "self-hosted"
@@ -24,8 +24,11 @@ RUN ARCH= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --print-architec
   && curl -fsSLO --compressed "https://$PREFIX.nodejs.org/$URLPATH/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
   && tar -xJf "node-v$NODE_VERSION-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
   && rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
+  && curl -o /usr/local/bin/spc -sL https://github.com/shivammathur/spc/releases/latest/download/spc \
+  && chmod a+x /usr/local/bin/spc \
   && apt-mark auto '.*' > /dev/null \
   && apt-mark manual libatomic1 \
+  && apt-mark manual curl \
   && find /usr/local -type f -executable -exec ldd '{}' ';' \
     | awk '/=>/ { print $(NF-1) }' \
     | sort -u \
@@ -37,7 +40,8 @@ RUN ARCH= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --print-architec
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
   # smoke tests
   && node --version \
-  && npm --version
+  && npm --version \
+  && spc -V
 
 RUN set -ex \
   && savedAptMark="$(apt-mark showmanual)" \
