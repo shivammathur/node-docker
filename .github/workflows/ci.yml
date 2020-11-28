@@ -15,34 +15,34 @@ jobs:
           - "linux/arm64"
           - "multi"
         tags:
-          - "latest, bionic, 1804"
-          - "xenial, 1604"
-          - "focal, 2004"
-          - "latest-slim, bionic-slim, 1804-slim"
-          - "xenial-slim, 1604-slim"
-          - "focal-slim, 2004-slim"
+          - "latest,bionic,1804"
+          - "xenial,1604"
+          - "focal,2004"
+          - "latest-slim,bionic-slim,1804-slim"
+          - "xenial-slim,1604-slim"
+          - "focal-slim,2004-slim"
         include:
-          -  tags: "latest, bionic, 1804"
+          -  tags: "latest,bionic,1804"
              build_args: "type=full"
              base: "ubuntu:18.04"
              file: bionic
-          -  tags: "xenial, 1604"
+          -  tags: "xenial,1604"
              build_args: "type=full"
              base: "ubuntu:16.04"
              file: xenial
-          -  tags: "focal, 2004"
+          -  tags: "focal,2004"
              build_args: "type=full"
              base: "ubuntu:20.04"
              file: focal
-          -  tags: "latest-slim, bionic-slim, 1804-slim"
+          -  tags: "latest-slim,bionic-slim,1804-slim"
              build_args: "type=slim"
              base: "ubuntu:18.04"
              file: bionic
-          -  tags: "xenial-slim, 1604-slim"
+          -  tags: "xenial-slim,1604-slim"
              build_args: "type=slim"
              base: "ubuntu:16.04"
              file: xenial
-          -  tags: "focal-slim, 2004-slim"
+          -  tags: "focal-slim,2004-slim"
              build_args: "type=slim"
              base: "ubuntu:20.04"
              file: focal
@@ -64,8 +64,8 @@ jobs:
             arm64) platform='arm64v8' ;;
             arm/v7) platform='arm32v7' ;;
           esac
-          tags=$(echo ${{ matrix.tags }} | awk 'BEGIN{FS=OFS=", "} NR==1{for (i=1;i<=NF;i++) $i="shivammathur/node:"$i} 1')
-          ptags=$(echo ${{ matrix.tags }} | awk -v platform="$platform" 'BEGIN{FS=OFS=", "} NR==1{for (i=1;i<=NF;i++) $i="shivammathur/node:"$i"-"platform} 1')
+          tags=$(echo ${{ matrix.tags }} | awk 'BEGIN{FS=OFS=","} NR==1{for (i=1;i<=NF;i++) $i="shivammathur/node:"$i} 1')
+          ptags=$(echo ${{ matrix.tags }} | awk -v platform="$platform" 'BEGIN{FS=OFS=","} NR==1{for (i=1;i<=NF;i++) $i="shivammathur/node:"$i"-"platform} 1')
           key=$(echo -n "$tags $ptags" | openssl dgst -sha256 | cut -d ' ' -f 2)
           multi='linux/amd64,linux/arm/v7,linux/arm64'
           [ ! "${{ matrix.file }}" = "focal" ] && multi="linux/386,$multi"
