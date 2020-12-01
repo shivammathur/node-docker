@@ -18,21 +18,21 @@ https://hub.docker.com/r/shivammathur/node
 ### `focal`, `2004`
 
 - Ubuntu 20.04 (focal)
-- PHP 5.6 to PHP 7.4
+- PHP 5.6 to PHP 8.0
 - Node.js 14.15.1, 12.16.3 on x86
 - Yarn 1.22.5
 
 ### `latest`, `bionic`, `1804`
 
 - Ubuntu 18.04 (bionic)
-- PHP 5.6 to PHP 7.4
+- PHP 5.6 to PHP 8.0
 - Node.js 14.15.1, 12.16.3 on x86
 - Yarn 1.22.5
 
 ### `xenial`, `1604`
 
 - Ubuntu 16.04 (xenial)
-- PHP 5.6 to PHP 7.4
+- PHP 5.6 to PHP 8.0
 - Node.js 14.15.1, 12.16.3 on x86
 - Yarn 1.22.5
 
