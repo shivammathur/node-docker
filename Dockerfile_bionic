@@ -74,12 +74,11 @@ RUN set -ex \
 RUN if [ "$type" = "full" ]; then set -ex \
       && savedAptMark="$(apt-mark showmanual)" \
       && apt-mark auto '.*' > /dev/null \
-      && apt-get update && apt-get install -y curl lsb-release software-properties-common unzip --no-install-recommends \
+      && apt-get update && apt-get install -y --no-install-recommends curl lsb-release software-properties-common unzip \
       && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php && apt-get update \
       && cp -r /etc/apt/sources.list.d /etc/apt/sources.list.d.save \
-      && DEBIAN_FRONTEND=noninteractive apt-get install -y php-pear \
       && for v in 5.6 7.0 7.1 7.2 7.3 7.4 8.0; do \
-           DEBIAN_FRONTEND=noninteractive apt-get install -y php"$v" \
+           DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends php"$v" \
            php"$v"-dev \
            php"$v"-curl \
            php"$v"-mbstring \
@@ -88,7 +87,11 @@ RUN if [ "$type" = "full" ]; then set -ex \
            php"$v"-mysql \
            php"$v"-pgsql \
            php"$v"-zip \
-           php-xdebug; \
+           php"$v"-xdebug; \
+         done \
+      && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends php-pear \
+      && for tool in pear pecl php phar phar.phar php-cgi php-config phpize phpdbg; do \
+           { [ -e /usr/bin/"$tool"8.0 ] && sudo update-alternatives --set $tool /usr/bin/"$tool"8.0 || true; } \
          done \
       && rm -rf /var/lib/apt/lists/* \
       && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
@@ -107,7 +110,8 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && php7.2 -v \
       && php7.3 -v \
       && php7.4 -v \
-      && php8.0 -v; \
+      && php8.0 -v \
+      && php -v; \
     fi
 
 CMD [ "/bin/bash" ]
