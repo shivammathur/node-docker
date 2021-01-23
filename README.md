@@ -1,10 +1,15 @@
-# node-docker (shivammathur/node)
+# node-docker 
+## `shivammathur/node` and `setupphp/node`
 
 <a href="https://github.com/shivammathur/node-docker" title="Docker images to run setup-php GitHub Action"><img alt="Build status" src="https://github.com/shivammathur/node-docker/workflows/Build/badge.svg"></a>
 <a href="https://github.com/shivammathur/node-docker/blob/master/LICENSE" title="license"><img alt="LICENSE" src="https://img.shields.io/badge/license-MIT-428f7e.svg"></a>
 
 Docker images to run setup-php GitHub Action.
-https://hub.docker.com/r/shivammathur/node
+
+## Namespaces
+
+- https://hub.docker.com/r/shivammathur/node
+- https://hub.docker.com/r/setupphp/node (No rate limits)
 
 ## Platforms/OS Architecture
 
@@ -57,9 +62,9 @@ https://hub.docker.com/r/shivammathur/node
 ## Platform/OS Architecture specific tags
 
 - Suffix `amd64`, `i386`, `arm32v7` `arm64v8` to above image variants to get image for specific OS architecture.
-- `i386` is not available for focal based images, namely `focal`, `20.04`, `focal-slim` and `20.04-slim`.
+For example `shivammathur/node:bionic-arm64v8`, `setupphp/node:bionic-arm64v8`
 
-For example `shivammathur/node:bionic-arm64v8`.
+- `i386` is not available for focal based images, namely `focal`, `20.04`, `focal-slim` and `20.04-slim`.
 
 
 ## License
@@ -72,3 +77,4 @@ Please see the [license file](LICENSE) for more information.
 - [Node.js and related software](https://github.com/nodejs/node/blob/master/LICENSE)
 - [PHP](https://github.com/php/php-src/blob/master/LICENSE)
 - [Xdebug](https://github.com/xdebug/xdebug/blob/master/LICENSE)
+- [Yarn](https://github.com/yarnpkg/yarn/blob/master/LICENSE)
