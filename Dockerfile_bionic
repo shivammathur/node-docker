@@ -58,7 +58,7 @@ RUN set -ex \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz \
   && apt-mark auto '.*' > /dev/null \
-  && apt-mark manual sudo make \
+  && apt-mark manual ca-certificates sudo make \
   && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
   && find /usr/local -type f -executable -exec ldd '{}' ';' \
     | awk '/=>/ { print $(NF-1) }' \
