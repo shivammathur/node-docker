@@ -1,6 +1,6 @@
 FROM ubuntu:xenial
 ARG type
-ENV NODE_VERSION 14.15.4
+ENV NODE_VERSION 14.15.5
 ENV NODE_VERSION_x86 12.16.3
 ENV YARN_VERSION 1.22.10
 ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
@@ -52,7 +52,8 @@ RUN set -ex \
   && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr make sudo --no-install-recommends \
   && rm -rf /var/lib/apt/lists/* \
   && curl -fsSLO --compressed "https://github.com/yarnpkg/yarn/releases/download/v$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
-  && mkdir -p -m 777 /opt /opt/hostedtoolcache \
+  && mkdir -p /opt /opt/hostedtoolcache \
+  && chmod -R 777 /opt/hostedtoolcache \
   && tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/ \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
