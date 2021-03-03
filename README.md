@@ -64,7 +64,7 @@ Docker images to run setup-php GitHub Action.
 - Suffix `amd64`, `i386`, `arm32v7` `arm64v8` to above image variants to get image for specific OS architecture.
 For example `shivammathur/node:bionic-arm64v8`, `setupphp/node:bionic-arm64v8`
 
-- `i386` is not available for focal based images, namely `focal`, `20.04`, `focal-slim` and `20.04-slim`.
+- `i386` is not available for focal based images, namely `latest`, `focal`, `20.04`, `latest-slim`, `focal-slim` and `20.04-slim`.
 
 
 ## License

@@ -16,14 +16,18 @@ jobs:
           - "linux/arm64"
           - "multi"
         tags:
-          - "latest,bionic,1804"
+          - "latest,focal,2004"
+          - "bionic,1804"
           - "xenial,1604"
-          - "focal,2004"
-          - "latest-slim,bionic-slim,1804-slim"
+          - "latest-slim,focal-slim,2004-slim"
+          - "bionic-slim,1804-slim"
           - "xenial-slim,1604-slim"
-          - "focal-slim,2004-slim"
         include:
-          -  tags: "latest,bionic,1804"
+          -  tags: "latest,focal,2004"
+             build_args: "type=full"
+             base: "ubuntu:20.04"
+             file: focal
+          -  tags: "bionic,1804"
              build_args: "type=full"
              base: "ubuntu:18.04"
              file: bionic
@@ -31,11 +35,11 @@ jobs:
              build_args: "type=full"
              base: "ubuntu:16.04"
              file: xenial
-          -  tags: "focal,2004"
-             build_args: "type=full"
+          -  tags: "latest-slim,focal-slim,2004-slim"
+             build_args: "type=slim"
              base: "ubuntu:20.04"
              file: focal
-          -  tags: "latest-slim,bionic-slim,1804-slim"
+          -  tags: "bionic-slim,1804-slim"
              build_args: "type=slim"
              base: "ubuntu:18.04"
              file: bionic
@@ -43,10 +47,6 @@ jobs:
              build_args: "type=slim"
              base: "ubuntu:16.04"
              file: xenial
-          -  tags: "focal-slim,2004-slim"
-             build_args: "type=slim"
-             base: "ubuntu:20.04"
-             file: focal
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
