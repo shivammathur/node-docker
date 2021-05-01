@@ -20,14 +20,14 @@ Docker images to run setup-php GitHub Action.
 
 ## Image Variants/Tags
 
-### `focal`, `2004`
+### `latest`, `focal`, `2004`
 
 - Ubuntu 20.04 (focal)
 - PHP 5.6 to PHP 8.0
 - Node.js 14.16.1, 12.16.3 on x86
 - Yarn 1.22.10
 
-### `latest`, `bionic`, `1804`
+### `bionic`, `1804`
 
 - Ubuntu 18.04 (bionic)
 - PHP 5.6 to PHP 8.0
@@ -41,13 +41,13 @@ Docker images to run setup-php GitHub Action.
 - Node.js 14.16.1, 12.16.3 on x86
 - Yarn 1.22.10
 
-### `focal-slim`, `2004-slim`
+### `latest-slim`, `focal-slim`, `2004-slim`
 
 - Ubuntu 20.04 (focal)
 - Node.js 14.16.1, 12.16.3 on x86
 - Yarn 1.22.10
 
-### `latest-slim`, `bionic-slim`, `1804-slim`
+### `bionic-slim`, `1804-slim`
 
 - Ubuntu 18.04 (bionic)
 - Node.js 14.16.1, 12.16.3 on x86
