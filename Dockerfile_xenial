@@ -1,6 +1,7 @@
 FROM ubuntu:xenial
 ARG type
-ENV NODE_VERSION 14.16.0
+ENV CONTAINER shivammathur/node
+ENV NODE_VERSION 14.16.1
 ENV NODE_VERSION_x86 12.16.3
 ENV YARN_VERSION 1.22.10
 ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
@@ -75,9 +76,10 @@ RUN set -ex \
 RUN if [ "$type" = "full" ]; then set -ex \
       && savedAptMark="$(apt-mark showmanual)" \
       && apt-mark auto '.*' > /dev/null \
-      && apt-get update && apt-get install -y --no-install-recommends curl lsb-release software-properties-common unzip \
+      && apt-get update && apt-get install -y --no-install-recommends apt-transport-https curl lsb-release software-properties-common unzip \
       && add-apt-repository ppa:git-core/ppa -y \
-      && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php \
+      && LC_ALL=C.UTF-8 apt-add-repository http://setup-php.com/ondrej/php/ubuntu -y \
+      && apt-key adv --keyserver keyserver.ubuntu.com --recv 4f4ea0aae5267a6c \
       && apt-get remove software-properties-common -y \
       && apt-get update \
       && cp -r /etc/apt/sources.list.d /etc/apt/sources.list.d.save \
