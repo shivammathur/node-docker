@@ -2,7 +2,7 @@
 ## `shivammathur/node` and `setupphp/node`
 
 <a href="https://github.com/shivammathur/node-docker" title="Docker images to run setup-php GitHub Action"><img alt="Build status" src="https://github.com/shivammathur/node-docker/workflows/Build/badge.svg"></a>
-<a href="https://github.com/shivammathur/node-docker/blob/master/LICENSE" title="license"><img alt="LICENSE" src="https://img.shields.io/badge/license-MIT-428f7e.svg"></a>
+<a href="https://github.com/shivammathur/node-docker/blob/main/LICENSE" title="license"><img alt="LICENSE" src="https://img.shields.io/badge/license-MIT-428f7e.svg"></a>
 
 Docker images to run setup-php GitHub Action.
 
