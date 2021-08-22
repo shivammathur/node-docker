@@ -10,21 +10,21 @@ ENV GITHUB_ENV "/tmp/set_env"
 ENV GITHUB_PATH "/tmp/add_path"
 ENV runner "self-hosted"
 
-RUN ARCH= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --print-architecture)" \
+RUN ARCH= && MULTILIB= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --print-architecture)" \
   && case "${dpkgArch##*-}" in \
     amd64) ARCH='x64';; \
     ppc64el) ARCH='ppc64le';; \
     s390x) ARCH='s390x';; \
     arm64) ARCH='arm64';; \
     armhf) ARCH='armv7l';; \
-    i386) ARCH='x86'; PREFIX='unofficial-builds'; URLPATH='download/release'; NODE_VERSION=$NODE_VERSION_x86;; \
+    i386) ARCH='x86'; MULTILIB='gcc-multilib'; PREFIX='unofficial-builds'; URLPATH='download/release'; NODE_VERSION=$NODE_VERSION_x86;; \
     *) echo "unsupported architecture"; exit 1 ;; \
   esac \
   && set -ex \
   && echo "" | tee "$GITHUB_ENV" "$GITHUB_PATH" \
   && mkdir -p "$RUNNER_TOOL_CACHE" \
   # libatomic1 for arm
-  && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr xz-utils libatomic1 --no-install-recommends \
+  && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr xz-utils libatomic1 $MULTILIB --no-install-recommends \
   && rm -rf /var/lib/apt/lists/* \
   && curl -fsSLO --compressed "https://$PREFIX.nodejs.org/$URLPATH/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
   && tar -xJf "node-v$NODE_VERSION-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
@@ -32,8 +32,7 @@ RUN ARCH= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --print-architec
   && curl -o /usr/local/bin/spc -sL https://github.com/shivammathur/spc/releases/latest/download/spc \
   && chmod a+x /usr/local/bin/spc \
   && apt-mark auto '.*' > /dev/null \
-  && apt-mark manual libatomic1 \
-  && apt-mark manual curl \
+  && apt-mark manual curl libatomic1 $MULTILIB \
   && find /usr/local -type f -executable -exec ldd '{}' ';' \
     | awk '/=>/ { print $(NF-1) }' \
     | sort -u \
