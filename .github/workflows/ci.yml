@@ -3,50 +3,23 @@ on:
   push:
   workflow_dispatch:
 jobs:
+  get-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: output matrix
+        id: set-matrix
+        run: bash .github/scripts/get-matrix.sh
   build:
+    needs: get-matrix
     if: "!contains(github.event.head_commit.message, 'skip-build')"
     name: Build
     strategy:
       fail-fast: false
-      matrix:
-        platform:
-          - "linux/386"
-          - "linux/amd64"
-          - "linux/arm/v7"
-          - "linux/arm64"
-          - "multi"
-        tags:
-          - "latest,focal,2004"
-          - "bionic,1804"
-          - "xenial,1604"
-          - "latest-slim,focal-slim,2004-slim"
-          - "bionic-slim,1804-slim"
-          - "xenial-slim,1604-slim"
-        include:
-          -  tags: "latest,focal,2004"
-             build_args: "type=full"
-             base: "ubuntu:20.04"
-             file: focal
-          -  tags: "bionic,1804"
-             build_args: "type=full"
-             base: "ubuntu:18.04"
-             file: bionic
-          -  tags: "xenial,1604"
-             build_args: "type=full"
-             base: "ubuntu:16.04"
-             file: xenial
-          -  tags: "latest-slim,focal-slim,2004-slim"
-             build_args: "type=slim"
-             base: "ubuntu:20.04"
-             file: focal
-          -  tags: "bionic-slim,1804-slim"
-             build_args: "type=slim"
-             base: "ubuntu:18.04"
-             file: bionic
-          -  tags: "xenial-slim,1604-slim"
-             build_args: "type=slim"
-             base: "ubuntu:16.04"
-             file: xenial
+      matrix: ${{fromJson(needs.get-matrix.outputs.matrix)}}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -54,28 +27,11 @@ jobs:
 
       - name: Prep
         id: prep
-        continue-on-error: true
-        run: |
-          platform=$(echo "${{ matrix.platform }}" | cut -d '/' -f 2-3)
-          case $platform in
-            386)
-              [ "${{ matrix.file }}" = "focal" ] && echo "386 not supported on focal" && exit 1
-              platform='i386'
-            ;;
-            arm64) platform='arm64v8' ;;
-            arm/v7) platform='arm32v7' ;;
-          esac
-          tags=$(echo ${{ matrix.tags }} | awk 'BEGIN{FS=OFS=","} NR==1{for (i=1;i<=NF;i++) $i="shivammathur/node:"$i} 1')
-          orgtags=$(echo ${{ matrix.tags }} | awk 'BEGIN{FS=OFS=","} NR==1{for (i=1;i<=NF;i++) $i="setupphp/node:"$i} 1')
-          ptags=$(echo ${{ matrix.tags }} | awk -v platform="$platform" 'BEGIN{FS=OFS=","} NR==1{for (i=1;i<=NF;i++) $i="shivammathur/node:"$i"-"platform} 1')
-          orgptags=$(echo ${{ matrix.tags }} | awk -v platform="$platform" 'BEGIN{FS=OFS=","} NR==1{for (i=1;i<=NF;i++) $i="setupphp/node:"$i"-"platform} 1')
-          key=$(echo -n "$tags $ptags" | openssl dgst -sha256 | cut -d ' ' -f 2)
-          multi='linux/amd64,linux/arm/v7,linux/arm64'
-          [ ! "${{ matrix.file }}" = "focal" ] && multi="linux/386,$multi"
-          echo ::set-output name=tags::${tags},${orgtags}
-          echo ::set-output name=ptags::${ptags},$orgptags
-          echo ::set-output name=key::${key}
-          echo ::set-output name=multi::${multi}
+        run: bash .github/scripts/prep-environment.sh
+        env:
+          PLATFORM: ${{ matrix.platform }}
+          TAGS: ${{ matrix.tags }}
+          FILE: ${{ matrix.file }}
 
       - name: Set up Docker Buildx
         if: steps.prep.outcome == 'success'
