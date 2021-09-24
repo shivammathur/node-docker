@@ -23,34 +23,40 @@ Docker images to run setup-php GitHub Action.
 ### `latest`
 
 - Ubuntu 20.04 (focal), Ubuntu 18.04 (bionic) on i386
-- PHP 5.6 to PHP 8.0
+- PHP 5.6 to PHP 8.1
+- Node.js 14.17.6, 12.16.3 on x86
+- Yarn 1.22.10
+
+### `hirsute`, `2104`
+
+- Ubuntu 21.04 (hirsute)
+- PHP 5.6 to PHP 8.1
 - Node.js 14.17.6, 12.16.3 on x86
 - Yarn 1.22.10
 
 ### `focal`, `2004`
 
 - Ubuntu 20.04 (focal)
-- PHP 5.6 to PHP 8.0
+- PHP 5.6 to PHP 8.1
 - Node.js 14.17.6, 12.16.3 on x86
 - Yarn 1.22.10
 
 ### `bionic`, `1804`
 
 - Ubuntu 18.04 (bionic)
-- PHP 5.6 to PHP 8.0
-- Node.js 14.17.6, 12.16.3 on x86
-- Yarn 1.22.10
-
-### `xenial`, `1604`
-
-- Ubuntu 16.04 (xenial)
-- PHP 5.6 to PHP 8.0
+- PHP 5.6 to PHP 8.1
 - Node.js 14.17.6, 12.16.3 on x86
 - Yarn 1.22.10
 
 ### `latest-slim`
 
 - Ubuntu 20.04 (focal), Ubuntu 18.04 (bionic) on i386
+- Node.js 14.17.6, 12.16.3 on x86
+- Yarn 1.22.10
+
+### `hirsute-slim`, `2104-slim`
+
+- Ubuntu 21.04 (hirsute)
 - Node.js 14.17.6, 12.16.3 on x86
 - Yarn 1.22.10
 
@@ -66,18 +72,12 @@ Docker images to run setup-php GitHub Action.
 - Node.js 14.17.6, 12.16.3 on x86
 - Yarn 1.22.10
 
-### `xenial-slim`, `1604-slim`
-
-- Ubuntu 16.04 (xenial)
-- Node.js 14.17.6, 12.16.3 on x86
-- Yarn 1.22.10
-
 ## Platform/OS Architecture specific tags
 
 - Suffix `amd64`, `i386`, `arm32v7` `arm64v8` to above image variants to get image for specific OS architecture.
 For example `shivammathur/node:bionic-arm64v8`, `setupphp/node:bionic-arm64v8`
 
-- `i386` is not available for focal based images, namely `focal`, `20.04`, `focal-slim` and `20.04-slim`.
+- `i386` is not available for Ubuntu 20.04 (focal) and newer.
 - `i386` latest and latest-slim images are based on Ubuntu 18.04 (bionic).
 
 ## License
