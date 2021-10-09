@@ -92,6 +92,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
            php"$v"-pgsql \
            php"$v"-zip; \
          done \
+      && curl -o /usr/lib/ssl/cert.pem -sL https://curl.se/ca/cacert.pem \
       && curl -o /tmp/pear.phar -sL https://raw.githubusercontent.com/pear/pearweb_phars/master/install-pear-nozlib.phar \
       && php /tmp/pear.phar && sudo rm -f /tmp/pear.phar \
       && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends autoconf automake gcc g++ git \
