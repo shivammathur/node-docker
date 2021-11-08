@@ -90,16 +90,13 @@ RUN if [ "$type" = "full" ]; then set -ex \
            php"$v"-intl \
            php"$v"-mysql \
            php"$v"-pgsql \
+           php"$v"-xdebug \
            php"$v"-zip; \
          done \
       && curl -o /usr/lib/ssl/cert.pem -sL https://curl.se/ca/cacert.pem \
       && curl -o /tmp/pear.phar -sL https://raw.githubusercontent.com/pear/pearweb_phars/master/install-pear-nozlib.phar \
       && php /tmp/pear.phar && sudo rm -f /tmp/pear.phar \
       && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends autoconf automake gcc g++ git \
-      && for v in 5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1; do \
-           DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends php"$v"-xdebug 2>/dev/null \
-           || (pear update-channels && pecl install -f xdebug && echo "zend_extension=xdebug" > /etc/php/"$v"/mods-available/xdebug.ini && phpenmod -v "$v" xdebug) \
-         done \
       && for tool in php phar phar.phar php-cgi php-config phpize phpdbg; do \
            { [ -e /usr/bin/"$tool"8.0 ] && sudo update-alternatives --set $tool /usr/bin/"$tool"8.0 || true; } \
          done \
