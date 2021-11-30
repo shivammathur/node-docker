@@ -97,9 +97,6 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && curl -o /tmp/pear.phar -sL https://raw.githubusercontent.com/pear/pearweb_phars/master/install-pear-nozlib.phar \
       && php /tmp/pear.phar && sudo rm -f /tmp/pear.phar \
       && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends autoconf automake gcc g++ git \
-      && for tool in php phar phar.phar php-cgi php-config phpize phpdbg; do \
-           { [ -e /usr/bin/"$tool"8.0 ] && sudo update-alternatives --set $tool /usr/bin/"$tool"8.0 || true; } \
-         done \
       && rm -rf /var/lib/apt/lists/* \
       && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
       && find /usr/local -type f -executable -exec ldd '{}' ';' \
