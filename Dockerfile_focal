@@ -75,7 +75,7 @@ RUN set -ex \
 RUN if [ "$type" = "full" ]; then set -ex \
       && savedAptMark="$(apt-mark showmanual)" \
       && apt-mark auto '.*' > /dev/null \
-      && apt-get update && apt-get install -y --no-install-recommends curl git gnupg lsb-release software-properties-common unzip \
+      && apt-get update && apt-get install -y --no-install-recommends curl git gnupg lsb-release mysql-server postgresql software-properties-common unzip \
       && add-apt-repository ppa:git-core/ppa -y \
       && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php \
       && apt-get remove software-properties-common -y \
