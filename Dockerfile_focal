@@ -31,7 +31,8 @@ RUN ARCH= && MULTILIB= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --p
   && tar -xJf "node-v$NODE_VERSION-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
   && rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
   && curl -o /usr/local/bin/spc -sL https://github.com/shivammathur/spc/releases/latest/download/spc \
-  && chmod a+x /usr/local/bin/spc \
+  && curl -o /usr/local/bin/systemctl -sL https://raw.githubusercontent.com/shivammathur/node-docker/main/systemctl-shim \
+  && chmod a+x /usr/local/bin/spc /usr/local/bin/systemctl \
   && apt-mark auto '.*' > /dev/null \
   && apt-mark manual curl libatomic1 $MULTILIB \
   && find /usr/local -type f -executable -exec ldd '{}' ';' \
@@ -95,6 +96,8 @@ RUN if [ "$type" = "full" ]; then set -ex \
            php"$v"-xdebug \
            php"$v"-zip; \
          done \
+      && curl -o /usr/bin/systemctl -sL https://raw.githubusercontent.com/shivammathur/node-docker/main/systemctl-shim \
+      && chmod a+x /usr/bin/systemctl \
       && curl -o /usr/lib/ssl/cert.pem -sL https://curl.se/ca/cacert.pem \
       && curl -o /tmp/pear.phar -sL https://raw.githubusercontent.com/pear/pearweb_phars/master/install-pear-nozlib.phar \
       && php /tmp/pear.phar && sudo rm -f /tmp/pear.phar \

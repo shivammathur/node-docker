@@ -1,0 +1,39 @@
+#!/bin/sh
+
+CMD=service
+SERVICE=${2%".service"}
+
+case "$1" in
+    start)
+        "${CMD}" "$SERVICE" start
+        ;;
+
+    stop)
+        "${CMD}" "$SERVICE" stop
+        ;;
+
+    status)
+        "${CMD}" "$SERVICE" status
+        ;;
+
+    restart)
+        "${CMD}" "$SERVICE" restart
+        ;;
+
+    reload|force-reload)
+        "${CMD}" "$SERVICE" reload
+        ;;
+
+    *enable|*disable|*active)
+        echo "systemctl is a sysVinit wrapper and does not support this operation"
+        exit 1;
+        ;;
+
+    daemon-reload)
+        ;;
+
+    *)
+        echo "Usage: $0 {start|stop|status|restart|reload|force-reload}"
+        exit 1
+
+esac
