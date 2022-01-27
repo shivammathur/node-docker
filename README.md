@@ -24,52 +24,52 @@ Docker images to run setup-php GitHub Action.
 
 - Ubuntu 20.04 (focal), Ubuntu 18.04 (bionic) on i386
 - PHP 5.6 to PHP 8.1
-- Node.js 14.18.3, 12.16.3 on x86
+- Node.js 14.18.3
 - Yarn 1.22.17
 
 ### `hirsute`, `2104`
 
 - Ubuntu 21.04 (hirsute)
 - PHP 5.6 to PHP 8.1
-- Node.js 14.18.3, 12.16.3 on x86
+- Node.js 14.18.3
 - Yarn 1.22.17
 
 ### `focal`, `2004`
 
 - Ubuntu 20.04 (focal)
 - PHP 5.6 to PHP 8.1
-- Node.js 14.18.3, 12.16.3 on x86
+- Node.js 14.18.3
 - Yarn 1.22.17
 
 ### `bionic`, `1804`
 
 - Ubuntu 18.04 (bionic)
 - PHP 5.6 to PHP 8.1
-- Node.js 14.18.3, 12.16.3 on x86
+- Node.js 14.18.3
 - Yarn 1.22.17
 
 ### `latest-slim`
 
 - Ubuntu 20.04 (focal), Ubuntu 18.04 (bionic) on i386
-- Node.js 14.18.3, 12.16.3 on x86
+- Node.js 14.18.3
 - Yarn 1.22.17
 
 ### `hirsute-slim`, `2104-slim`
 
 - Ubuntu 21.04 (hirsute)
-- Node.js 14.18.3, 12.16.3 on x86
+- Node.js 14.18.3
 - Yarn 1.22.17
 
 ### `focal-slim`, `2004-slim`
 
 - Ubuntu 20.04 (focal)
-- Node.js 14.18.3, 12.16.3 on x86
+- Node.js 14.18.3
 - Yarn 1.22.17
 
 ### `bionic-slim`, `1804-slim`
 
 - Ubuntu 18.04 (bionic)
-- Node.js 14.18.3, 12.16.3 on x86
+- Node.js 14.18.3
 - Yarn 1.22.17
 
 ## Platform/OS Architecture specific tags
