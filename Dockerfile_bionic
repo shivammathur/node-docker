@@ -77,7 +77,7 @@ RUN set -ex \
 RUN if [ "$type" = "full" ]; then set -ex \
       && savedAptMark="$(apt-mark showmanual)" \
       && apt-mark auto '.*' > /dev/null \
-      && apt-get update && apt-get install -y --no-install-recommends curl git gnupg lsb-release mysql-server postgresql software-properties-common unzip \
+      && apt-get update && apt-get install -y --no-install-recommends curl gnupg lsb-release mysql-server postgresql software-properties-common unzip \
       && usermod -d /var/lib/mysql/ mysql \
       && add-apt-repository ppa:git-core/ppa -y \
       && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php \
@@ -100,9 +100,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && curl -o /usr/lib/ssl/cert.pem -sL https://curl.se/ca/cacert.pem \
       && curl -o /tmp/pear.phar -sL https://raw.githubusercontent.com/pear/pearweb_phars/master/install-pear-nozlib.phar \
       && php /tmp/pear.phar && sudo rm -f /tmp/pear.phar \
-      && apt-get install -y --no-install-recommends autoconf automake gcc g++ \
-      # Fix for broken arm builds https://launchpad.net/~git-core/+archive/ubuntu/ppa
-      && apt-get install -y --no-install-recommends git || true \
+      && apt-get install -y --no-install-recommends autoconf automake gcc g++ git \
       && rm -rf /var/lib/apt/lists/* \
       && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
       && find /usr/local -type f -executable -exec ldd '{}' ';' \
