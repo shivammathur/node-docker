@@ -1,4 +1,4 @@
-FROM ubuntu:hirsute
+FROM ubuntu:impish
 ARG type
 ENV CONTAINER shivammathur/node
 ENV DEBIAN_FRONTEND=noninteractive

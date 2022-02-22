@@ -46,8 +46,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: "${{ steps.prep.outputs.key }}-buildx-${{ github.sha }}-20212701"
-          restore-keys: "${{ steps.prep.outputs.key }}-buildx-${{ github.sha }}-20212301"
+          key: "${{ steps.prep.outputs.key }}-buildx-${{ github.sha }}-20220222"
+          restore-keys: "${{ steps.prep.outputs.key }}-buildx-${{ github.sha }}-20220222"
 
       - name: Login to DockerHub
         uses: docker/login-action@v1

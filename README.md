@@ -27,9 +27,9 @@ Docker images to run setup-php GitHub Action.
 - Node.js 14.19.0
 - Yarn 1.22.17
 
-### `hirsute`, `2104`
+### `impish`, `2110`
 
-- Ubuntu 21.04 (hirsute)
+- Ubuntu 21.10 (impish)
 - PHP 5.6 to PHP 8.1
 - Node.js 14.19.0
 - Yarn 1.22.17
@@ -54,9 +54,9 @@ Docker images to run setup-php GitHub Action.
 - Node.js 14.19.0
 - Yarn 1.22.17
 
-### `hirsute-slim`, `2104-slim`
+### `impish-slim`, `2110-slim`
 
-- Ubuntu 21.04 (hirsute)
+- Ubuntu 21.10 (impish)
 - Node.js 14.19.0
 - Yarn 1.22.17
 
