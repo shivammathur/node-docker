@@ -81,7 +81,6 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && usermod -d /var/lib/mysql/ mysql \
       && add-apt-repository ppa:git-core/ppa -y \
       && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php \
-      && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/apache2 \
       && apt-get remove software-properties-common -y \
       && apt-get update \
       && cp -r /etc/apt/sources.list.d /etc/apt/sources.list.d.save \
