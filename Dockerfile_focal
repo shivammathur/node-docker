@@ -85,7 +85,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && apt-get remove software-properties-common -y \
       && apt-get update \
       && cp -r /etc/apt/sources.list.d /etc/apt/sources.list.d.save \
-      && for v in 5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1; do \
+      && for v in 5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1 8.2; do \
            apt-get install -y --no-install-recommends php"$v" \
            php"$v"-dev \
            php"$v"-curl \
@@ -125,6 +125,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && php7.4 -v \
       && php8.0 -v \
       && php8.1 -v \
+      && php8.2 -v \
       && php -v; \
     fi
 

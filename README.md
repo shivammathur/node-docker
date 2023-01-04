@@ -23,28 +23,28 @@ Docker images to run setup-php GitHub Action.
 ### `latest`
 
 - Ubuntu 20.04 (focal), Ubuntu 18.04 (bionic) on i386
-- PHP 5.6 to PHP 8.1
+- PHP 5.6 to PHP 8.2
 - Node.js 16.19.0
 - Yarn 1.22.19
 
 ### `jammy`, `2204`
 
 - Ubuntu 22.04 (jammy)
-- PHP 5.6 to PHP 8.1
+- PHP 5.6 to PHP 8.2
 - Node.js 16.19.0
 - Yarn 1.22.19
 
 ### `focal`, `2004`
 
 - Ubuntu 20.04 (focal)
-- PHP 5.6 to PHP 8.1
+- PHP 5.6 to PHP 8.2
 - Node.js 16.19.0
 - Yarn 1.22.19
 
 ### `bionic`, `1804`
 
 - Ubuntu 18.04 (bionic)
-- PHP 5.6 to PHP 8.1
+- PHP 5.6 to PHP 8.2
 - Node.js 16.19.0
 - Yarn 1.22.19
 
