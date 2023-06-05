@@ -100,7 +100,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && curl -o /usr/lib/ssl/cert.pem -sL https://curl.se/ca/cacert.pem \
       && curl -o /tmp/pear.phar -sL https://raw.githubusercontent.com/pear/pearweb_phars/master/install-pear-nozlib.phar \
       && php /tmp/pear.phar && sudo rm -f /tmp/pear.phar \
-      && apt-get install -y --no-install-recommends autoconf automake gcc g++ git \
+      && apt-get install -y --no-install-recommends autoconf automake docker.io gcc g++ git \
       && rm -rf /var/lib/apt/lists/* \
       && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
       && find /usr/local -type f -executable -exec ldd '{}' ';' \
@@ -115,6 +115,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && gcc --version \
       && g++ --version \
       && git --version \
+      && docker --version \
       && php5.6 -v \
       && php7.0 -v \
       && php7.1 -v \
