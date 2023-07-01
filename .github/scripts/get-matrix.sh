@@ -1,5 +1,5 @@
 platforms=(linux/386 linux/amd64 linux/arm/v7 linux/arm64 multi)
-tags=('latest' 'bookworm,12' 'jammy,2204' 'focal,2004' 'bionic,1804' 'latest-slim' 'bookworm-slim,12-slim' 'jammy-slim,2204-slim' 'focal-slim,2004-slim' 'bionic-slim,1804-slim')
+tags=('latest' 'bookworm,12' 'jammy,2204' 'focal,2004' 'latest-slim' 'bookworm-slim,12-slim' 'jammy-slim,2204-slim' 'focal-slim,2004-slim')
 matrix=()
 for platform in "${platforms[@]}"; do
   for tag in "${tags[@]}"; do
@@ -23,12 +23,6 @@ for platform in "${platforms[@]}"; do
       fi
       base="ubuntu:20.04"
       file="focal"
-    elif [[ "$tag" =~ bionic ]]; then
-      if [ "$platform" = "linux/386" ]; then
-        continue
-      fi
-      base="ubuntu:18.04"
-      file="bionic"
     elif [[ "$tag" =~ bookworm ]]; then
       base="debian:12"
       file="bookworm"

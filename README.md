@@ -48,13 +48,6 @@ Docker images to run setup-php GitHub Action.
 - Node.js 16.20.1
 - Yarn 1.22.19
 
-### `bionic`, `1804`
-
-- Ubuntu 18.04 (bionic)
-- PHP 5.6 to PHP 8.2
-- Node.js 16.20.1
-- Yarn 1.22.19
-
 ### `latest-slim`
 
 - Ubuntu 22.04 (jammy)), Debian 12 (bookwork) on i386
@@ -73,16 +66,10 @@ Docker images to run setup-php GitHub Action.
 - Node.js 16.20.1
 - Yarn 1.22.19
 
-### `bionic-slim`, `1804-slim`
-
-- Ubuntu 18.04 (bionic)
-- Node.js 16.20.1
-- Yarn 1.22.19
-
 ## Platform/OS Architecture specific tags
 
 - Suffix `amd64`, `i386`, `arm32v7` `arm64v8` to above image variants to get image for specific OS architecture.
-For example `shivammathur/node:bionic-arm64v8`, `setupphp/node:bionic-arm64v8`
+For example `shivammathur/node:focal-arm64v8`, `setupphp/node:focal-arm64v8`
 
 - `i386` is only available for Debian 12 (bookworm).
 - `i386` latest and latest-slim images are based on Debian 12 (bookworm).

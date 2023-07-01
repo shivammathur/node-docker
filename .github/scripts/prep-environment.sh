@@ -13,7 +13,7 @@ orgptags=$(echo "$TAGS" | awk -v platform="$platform" 'BEGIN{FS=OFS=","} NR==1{f
 key=$(echo -n "$tags $ptags" | openssl dgst -sha256 | cut -d ' ' -f 2)
 
 multi='linux/amd64,linux/arm/v7,linux/arm64'
-[ "${FILE:?}" = "bionic" ] && multi="linux/386,$multi"
+[ "${FILE:?}" = "bookworm" ] && multi="linux/386,$multi"
 
 (
   echo "tags=${tags},${orgtags}";
