@@ -27,7 +27,7 @@ Docker images to run setup-php GitHub Action.
 - Node.js 16.20.1
 - Yarn 1.22.19
 
-### `bookwork`, `12`
+### `bookworm`, `12`
 
 - Debian 12 (bookworm)
 - PHP 5.6 to PHP 8.2
@@ -50,7 +50,7 @@ Docker images to run setup-php GitHub Action.
 
 ### `latest-slim`
 
-- Ubuntu 22.04 (jammy)), Debian 12 (bookwork) on i386
+- Ubuntu 22.04 (jammy)), Debian 12 (bookworm) on i386
 - Node.js 16.20.1
 - Yarn 1.22.19
 
