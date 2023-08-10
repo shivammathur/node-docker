@@ -22,7 +22,7 @@ Docker images to run setup-php GitHub Action.
 
 ### `latest`
 
-- Ubuntu 22.04 (jammy), Debian 12 (bookworm) on i386
+- Ubuntu 22.04 (jammy), Debian 11 (bullseye) on i386
 - PHP 5.6 to PHP 8.2
 - Node.js 16.20.2
 - Yarn 1.22.19
@@ -30,6 +30,13 @@ Docker images to run setup-php GitHub Action.
 ### `bookworm`, `12`
 
 - Debian 12 (bookworm)
+- PHP 5.6 to PHP 8.2
+- Node.js 16.20.2
+- Yarn 1.22.19
+
+### `bullseye`, `11`
+
+- Debian 11 (bullseye)
 - PHP 5.6 to PHP 8.2
 - Node.js 16.20.2
 - Yarn 1.22.19
@@ -71,8 +78,8 @@ Docker images to run setup-php GitHub Action.
 - Suffix `amd64`, `i386`, `arm32v7` `arm64v8` to above image variants to get image for specific OS architecture.
 For example `shivammathur/node:focal-arm64v8`, `setupphp/node:focal-arm64v8`
 
-- `i386` is only available for Debian 12 (bookworm).
-- `i386` latest and latest-slim images are based on Debian 12 (bookworm).
+- `i386` is only available for Debian 11 (bullseye).
+- `i386` latest and latest-slim images are based on Debian 11 (bullseye).
 
 ## License
 
