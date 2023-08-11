@@ -107,10 +107,10 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && php /tmp/pear.phar && sudo rm -f /tmp/pear.phar \
       && apt-get install -y --no-install-recommends autoconf automake gcc g++ git \
       && apt-get install -y --no-install-recommends docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
-      && for v in 5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1 8.2 8.3; do \
-           DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends php"$v"-xdebug 2>/dev/null \
-           || (spc -p "$v" -e xdebug-xdebug/xdebug@master -r verbose) \
-         done \
+      && for v in 5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1 8.2 8.3; do \      
+           apt-get install -y --no-install-recommends php"$v"-xdebug 2>/dev/null || (spc -p "$v" -e xdebug-xdebug/xdebug@master -r verbose) \
+        && apt-get install -y --no-install-recommends php"$v"-imagick 2>/dev/null || (IMAGICK_LIBS=libmagickwand-dev spc -p "$v" -e imagick-imagick/imagick@master -r verbose); \
+      done \
       && for tool in php phar phar.phar php-cgi php-config phpize phpdbg; do \
            { [ -e /usr/bin/"$tool"8.2 ] && sudo update-alternatives --set $tool /usr/bin/"$tool"8.2 || true; } \
          done \
