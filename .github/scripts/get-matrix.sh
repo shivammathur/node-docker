@@ -5,8 +5,8 @@ for platform in "${platforms[@]}"; do
   for tag in "${tags[@]}"; do
     if [[ "$tag" =~ latest ]]; then
       if [ "$platform" = "linux/386" ]; then
-        base="debian:11"
-        file="bullseye"
+        base="debian:12"
+        file="bookworm"
       else
         base="ubuntu:22.04"
         file="jammy"
@@ -24,9 +24,6 @@ for platform in "${platforms[@]}"; do
       base="ubuntu:20.04"
       file="focal"
     elif [[ "$tag" =~ bookworm ]]; then
-      if [ "$platform" = "linux/386" ]; then
-        continue
-      fi
       base="debian:12"
       file="bookworm"
     elif [[ "$tag" =~ bullseye ]]; then

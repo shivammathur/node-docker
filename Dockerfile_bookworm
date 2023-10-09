@@ -2,7 +2,7 @@ FROM debian:bookworm
 ARG type
 ENV CONTAINER shivammathur/node
 ENV DEBIAN_FRONTEND=noninteractive
-ENV NODE_VERSION 16.20.2
+ENV NODE_VERSION 18.18.0
 ENV NODE_VERSION_x86 16.20.2
 ENV YARN_VERSION 1.22.19
 ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
@@ -74,7 +74,7 @@ RUN set -ex \
   # smoke test
   && yarn --version
 
-RUN if [ "$type" = "full" ]; then set -ex \
+RUN if [ "$type" = "full" ]; then DOCKER_PACKAGES= && set -ex \
       && savedAptMark="$(apt-mark showmanual)" \
       && apt-mark auto '.*' > /dev/null \
       && apt-get update && apt-get install -y --no-install-recommends curl gnupg jq lsb-release mariadb-server postgresql unzip \
@@ -106,7 +106,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
       && curl -o /tmp/pear.phar -sL https://raw.githubusercontent.com/pear/pearweb_phars/master/install-pear-nozlib.phar \
       && php /tmp/pear.phar && sudo rm -f /tmp/pear.phar \
       && apt-get install -y --no-install-recommends autoconf automake gcc g++ git \
-      && apt-get install -y --no-install-recommends docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
+      && [ "$(dpkg --print-architecture)" = "i386" ] && apt-get install -y --no-install-recommends docker.io || apt-get install -y --no-install-recommends docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
       && for v in 5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1 8.2 8.3; do \      
            apt-get install -y --no-install-recommends php"$v"-xdebug 2>/dev/null || (spc -p "$v" -e xdebug-xdebug/xdebug@master -r verbose) \
         && apt-get install -y --no-install-recommends php"$v"-imagick 2>/dev/null || (IMAGICK_LIBS=libmagickwand-dev spc -p "$v" -e imagick-imagick/imagick@master -r verbose); \
