@@ -1,0 +1,37 @@
+name: Update
+
+on:
+  schedule:
+    - cron: '0 23 */2 * *'
+  workflow_dispatch:
+
+jobs:
+  update-node-version:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Update
+      id: update
+      run: bash .github/scripts/update.sh
+
+    - name: Create update PR
+      id: cpr
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.TOKEN }}
+        author: "Node.js GitHub Bot <nodejs-github-bot@users.noreply.github.com>"
+        branch: update-branch
+        branch-suffix: short-commit-hash
+        base: main
+        commit-message: "Bump Node.js version to ${{ steps.update.outputs.version }}"
+        title: "Bump Node.js version to ${{ steps.update.outputs.version }}"
+        delete-branch: true
+    - name: Auto approve and merge
+      if: steps.cpr.outputs.pull-request-operation == 'created'
+      run: |
+        gh pr review --approve "${{ steps.cpr.outputs.pull-request-number }}"
+        gh pr merge -R "${{ github.repository }}" --merge --auto "${{ steps.cpr.outputs.pull-request-number }}"
+      env:
+        GH_TOKEN: ${{ secrets.TOKEN }}
