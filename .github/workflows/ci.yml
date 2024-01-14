@@ -1,6 +1,6 @@
 name: Build
 on:
-  push:
+  pull_request:
   workflow_dispatch:
 jobs:
   get-matrix:
@@ -78,3 +78,15 @@ jobs:
           build-args: ${{ matrix.build_args }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+  results:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: Final Results
+    needs: [build]
+    steps:
+      - run: exit 1
+        if: >-
+          ${{
+               contains(needs.*.result, 'failure')
+            || contains(needs.*.result, 'cancelled')
+          }}
