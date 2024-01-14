@@ -31,6 +31,6 @@ jobs:
     - name: Auto approve and merge
       if: steps.cpr.outputs.pull-request-operation == 'created'
       run: |
-        gh pr merge -R "${{ github.repository }}" --merge --auto "${{ steps.cpr.outputs.pull-request-number }}"
+        gh pr merge -R "${{ github.repository }}" --rebase --auto "${{ steps.cpr.outputs.pull-request-number }}"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
