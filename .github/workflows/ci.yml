@@ -78,6 +78,22 @@ jobs:
           build-args: ${{ matrix.build_args }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+  description:
+    runs-on: ubuntu-latest
+    name: Description
+    needs: [build]
+    strategy:
+      matrix:
+        repository: [shivammathur/node, setupphp/node]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.docker_username }}
+          password: ${{ secrets.docker_password }}
+          repository: ${{ matrix.repository }}
+
   results:
     if: ${{ always() }}
     runs-on: ubuntu-latest
