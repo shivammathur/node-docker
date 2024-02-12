@@ -112,7 +112,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
         && apt-get install -y --no-install-recommends php"$v"-imagick 2>/dev/null || (IMAGICK_LIBS=libmagickwand-dev spc -p "$v" -e imagick-imagick/imagick@master -r verbose); \
       done \
       && for tool in php phar phar.phar php-cgi php-config phpize phpdbg; do \
-           { [ -e /usr/bin/"$tool"8.2 ] && sudo update-alternatives --set $tool /usr/bin/"$tool"8.2 || true; } \
+           { [ -e /usr/bin/"$tool"8.3 ] && sudo update-alternatives --set $tool /usr/bin/"$tool"8.3 || true; } \
          done \
       && rm -rf /var/lib/apt/lists/* \
       && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
