@@ -22,7 +22,7 @@ Docker images to run setup-php GitHub Action.
 
 ### `latest`
 
-- Ubuntu 22.04 (jammy), Debian 12 (bookworm) on i386
+- Ubuntu 24.04 (noble), Debian 12 (bookworm) on i386
 - PHP 5.6 to PHP 8.3
 - Node.js 20.13.1, 16.20.2 (x86)
 - Yarn 1.22.19
@@ -41,6 +41,13 @@ Docker images to run setup-php GitHub Action.
 - Node.js 20.13.1, 16.20.2 (x86)
 - Yarn 1.22.19
 
+### `noble`, `2404`
+
+- Ubuntu 22.04 (noble)
+- PHP 5.6 to PHP 8.3
+- Node.js 20.13.1
+- Yarn 1.22.19
+
 ### `jammy`, `2204`
 
 - Ubuntu 22.04 (jammy)
@@ -57,8 +64,14 @@ Docker images to run setup-php GitHub Action.
 
 ### `latest-slim`
 
-- Ubuntu 22.04 (jammy)), Debian 12 (bookworm) on i386
+- Ubuntu 24.04 (jammy)), Debian 12 (bookworm) on i386
 - Node.js 20.13.1, 16.20.2 (x86)
+- Yarn 1.22.19
+
+### `noble-slim`, `2404-slim`
+
+- Ubuntu 24.04 (jammy)
+- Node.js 20.13.1
 - Yarn 1.22.19
 
 ### `jammy-slim`, `2204-slim`
