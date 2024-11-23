@@ -23,42 +23,42 @@ Docker images to run setup-php GitHub Action.
 ### `latest`
 
 - Ubuntu 24.04 (noble), Debian 12 (bookworm) on i386
-- PHP 5.6 to PHP 8.3
+- PHP 5.6 to PHP 8.4
 - Node.js 22.11.0, 16.20.2 (x86)
 - Yarn 1.22.19
 
 ### `bookworm`, `12`
 
 - Debian 12 (bookworm)
-- PHP 5.6 to PHP 8.3
+- PHP 5.6 to PHP 8.4
 - Node.js 22.11.0, 16.20.2 (x86)
 - Yarn 1.22.19
 
 ### `bullseye`, `11`
 
 - Debian 11 (bullseye)
-- PHP 5.6 to PHP 8.3
+- PHP 5.6 to PHP 8.4
 - Node.js 22.11.0, 16.20.2 (x86)
 - Yarn 1.22.19
 
 ### `noble`, `2404`
 
 - Ubuntu 22.04 (noble)
-- PHP 5.6 to PHP 8.3
+- PHP 5.6 to PHP 8.4
 - Node.js 22.11.0
 - Yarn 1.22.19
 
 ### `jammy`, `2204`
 
 - Ubuntu 22.04 (jammy)
-- PHP 5.6 to PHP 8.3
+- PHP 5.6 to PHP 8.4
 - Node.js 22.11.0
 - Yarn 1.22.19
 
 ### `focal`, `2004`
 
 - Ubuntu 20.04 (focal)
-- PHP 5.6 to PHP 8.3
+- PHP 5.6 to PHP 8.4
 - Node.js 22.11.0
 - Yarn 1.22.19
 
