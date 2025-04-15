@@ -1,15 +1,15 @@
 FROM ubuntu:jammy
 ARG type
-ENV CONTAINER shivammathur/node
+ENV CONTAINER=shivammathur/node
 ENV DEBIAN_FRONTEND=noninteractive
-ENV NODE_VERSION 22.14.0
-ENV NODE_VERSION_x86 16.20.2
-ENV YARN_VERSION 1.22.19
-ENV RUNNER_TOOL_PATH "/opt/hostedtoolcache"
-ENV RUNNER_TOOL_CACHE "/opt/hostedtoolcache"
-ENV GITHUB_ENV "/tmp/set_env"
-ENV GITHUB_PATH "/tmp/add_path"
-ENV runner "self-hosted"
+ENV NODE_VERSION=22.14.0
+ENV NODE_VERSION_x86=16.20.2
+ENV YARN_VERSION=1.22.19
+ENV RUNNER_TOOL_PATH="/opt/hostedtoolcache"
+ENV RUNNER_TOOL_CACHE="/opt/hostedtoolcache"
+ENV GITHUB_ENV="/tmp/set_env"
+ENV GITHUB_PATH="/tmp/add_path"
+ENV runner="self-hosted"
 
 RUN ARCH= && MULTILIB= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --print-architecture)" \
   && case "${dpkgArch##*-}" in \
