@@ -1,0 +1,55 @@
+#!/bin/bash
+
+get() {
+  local mode=$1
+  local file_path=$2
+  shift 2
+  links=("$@")
+  if [ "$mode" = "-s" ]; then
+    curl -sL "${links[0]}"
+  else
+    for link in "${links[@]}"; do
+      status_code=$(curl -w "%{http_code}" -o "$file_path" -sL "$link")
+      [ "$status_code" = "200" ] && break
+    done
+  fi
+}
+
+ubuntu_fingerprint() {
+  local ppa=$1
+  get -s -n "" "${lp_api[@]/%//~${ppa%/*}/+archive/${ppa##*/}}" | jq -r '.signing_key_fingerprint'
+}
+
+get_launchpad_key() {
+  local pa=$1
+  local key_file=$2
+  sks=(
+    'https://keyserver.ubuntu.com'
+    'https://pgp.mit.edu'
+    'https://keys.openpgp.org'
+  )
+  lp_api=(
+    'https://api.launchpad.net/1.0'
+    'https://api.launchpad.net/devel'
+  )  
+  fingerprint="$(get -s "" "${lp_api[@]/%//~${ppa%/*}/+archive/${ppa##*/}}" | jq -r '.signing_key_fingerprint')"
+  sks_params="op=get&options=mr&exact=on&search=0x$fingerprint"
+  key_urls=("${sks[@]/%/\/pks\/lookup\?"$sks_params"}")
+  get -q "$key_file" "${key_urls[@]}"
+  if [[ "$(file "$key_file")" =~ .*('Public-Key (old)'|'Secret-Key') ]]; then
+    gpg --batch --yes --dearmor "$key_file" && mv "$key_file".gpg "$key_file"
+  fi
+}
+
+add_ppa() {
+  local ppa=$1
+  local branches=$2
+  ppa_url="https://ppa.launchpadcontent.net/$ppa/ubuntu"
+  key_file=/usr/share/keyrings/"${ppa/\//-}"-keyring.gpg
+  list_dir=/etc/apt/sources.list.d
+  get_launchpad_key "$ppa" "$key_file"
+  . /etc/os-release
+  echo "deb [arch="$(dpkg --print-architecture)" signed-by=$key_file] $ppa_url $VERSION_CODENAME $branches" | tee -a "$list_dir"/"${ppa/\//-}".list
+}
+
+add_ppa "$1" "$2"
