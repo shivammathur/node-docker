@@ -55,13 +55,6 @@ Docker images to run setup-php GitHub Action.
 - Node.js 22.16.0
 - Yarn 1.22.19
 
-### `focal`, `2004`
-
-- Ubuntu 20.04 (focal)
-- PHP 5.6 to PHP 8.4
-- Node.js 22.16.0
-- Yarn 1.22.19
-
 ### `latest-slim`
 
 - Ubuntu 24.04 (jammy)), Debian 12 (bookworm) on i386
@@ -80,16 +73,10 @@ Docker images to run setup-php GitHub Action.
 - Node.js 22.16.0
 - Yarn 1.22.19
 
-### `focal-slim`, `2004-slim`
-
-- Ubuntu 20.04 (focal)
-- Node.js 22.16.0
-- Yarn 1.22.19
-
 ## Platform/OS Architecture specific tags
 
 - Suffix `amd64`, `i386`, `arm32v7` `arm64v8` to above image variants to get image for specific OS architecture.
-For example `shivammathur/node:focal-arm64v8`, `setupphp/node:focal-arm64v8`
+For example `shivammathur/node:noble-arm64v8`, `setupphp/node:noble-arm64v8`
 
 - `i386` is only available for Debian images.
 - `i386` builds are limited to Node.js 16.x, newer versions won't be added for this architecture.
