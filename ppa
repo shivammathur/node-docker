@@ -15,11 +15,6 @@ get() {
   fi
 }
 
-ubuntu_fingerprint() {
-  local ppa=$1
-  get -s -n "" "${lp_api[@]/%//~${ppa%/*}/+archive/${ppa##*/}}" | jq -r '.signing_key_fingerprint'
-}
-
 get_launchpad_key() {
   local pa=$1
   local key_file=$2
@@ -32,7 +27,7 @@ get_launchpad_key() {
     'https://api.launchpad.net/1.0'
     'https://api.launchpad.net/devel'
   )  
-  fingerprint="$(get -s "" "${lp_api[@]/%//~${ppa%/*}/+archive/${ppa##*/}}" | jq -r '.signing_key_fingerprint')"
+  fingerprint="$(get -s "" "${lp_api[@]/%//~${ppa%/*}/+archive/ubuntu/${ppa##*/}}" | jq -r '.signing_key_fingerprint')"
   sks_params="op=get&options=mr&exact=on&search=0x$fingerprint"
   key_urls=("${sks[@]/%/\/pks\/lookup\?"$sks_params"}")
   get -q "$key_file" "${key_urls[@]}"
