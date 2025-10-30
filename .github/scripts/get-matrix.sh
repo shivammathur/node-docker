@@ -41,7 +41,11 @@ for platform in "${platforms[@]}"; do
     else
       build_args="type=full"
     fi
-    matrix+=("{\"platform\": \"$platform\", \"tags\": \"$tag\", \"base\": \"$base\", \"build_args\": \"$build_args\", \"file\": \"$file\"}")
+    runner="ubuntu-latest"
+    if [ "$platform" = "linux/arm64" ] || [ "$platform" = "linux/arm/v7" ] || [ "$platform" = "multi" ]; then
+      runner="ubuntu-24.04-arm"
+    fi
+    matrix+=("{\"platform\": \"$platform\", \"tags\": \"$tag\", \"base\": \"$base\", \"build_args\": \"$build_args\", \"file\": \"$file\", \"runner\": \"$runner\"}")
   done
 done
 echo "matrix={\"include\":[$(echo "${matrix[@]}" | sed -e 's|} {|}, {|g')]}" >> "$GITHUB_OUTPUT"
