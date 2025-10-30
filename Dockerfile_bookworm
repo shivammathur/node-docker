@@ -23,17 +23,20 @@ RUN ARCH= && MULTILIB= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --p
     *) echo "unsupported architecture"; exit 1 ;; \
   esac \
   && set -ex \
-  && echo "" | tee "$GITHUB_ENV" "$GITHUB_PATH" \
+  && : > "$GITHUB_ENV" \
+  && : > "$GITHUB_PATH" \
   && mkdir -p "$RUNNER_TOOL_CACHE" \
   # libatomic1 for arm
   && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr xz-utils libatomic1 $MULTILIB --no-install-recommends \
-  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/cache/* /usr/share/doc/* /usr/share/man/* \
   && curl -fsSLO --compressed "https://$PREFIX.nodejs.org/$URLPATH/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
   && tar -xJf "node-v$NODE_VERSION-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
   && rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
-  && curl -o /usr/local/bin/spc -sL https://github.com/shivammathur/spc/releases/latest/download/spc \
-  && curl -o /usr/local/bin/systemctl -sL https://raw.githubusercontent.com/shivammathur/node-docker/main/systemctl-shim \
-  && chmod a+x /usr/local/bin/spc /usr/local/bin/systemctl \
+  && curl -fsSL https://github.com/shivammathur/spc/releases/latest/download/spc -o /tmp/spc \
+  && curl -fsSL https://raw.githubusercontent.com/shivammathur/node-docker/main/systemctl-shim -o /tmp/systemctl \
+  && install -m 0755 /tmp/spc /usr/local/bin/spc \
+  && install -m 0755 /tmp/systemctl /usr/local/bin/systemctl \
+  && rm /tmp/spc /tmp/systemctl \
   && apt-mark auto '.*' > /dev/null \
   && apt-mark manual curl libatomic1 $MULTILIB \
   && find /usr/local -type f -executable -exec ldd '{}' ';' \
@@ -53,7 +56,7 @@ RUN ARCH= && MULTILIB= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --p
 RUN set -ex \
   && savedAptMark="$(apt-mark showmanual)" \
   && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr make sudo --no-install-recommends \
-  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/cache/* /usr/share/doc/* /usr/share/man/* \
   && curl -fsSLO --compressed "https://github.com/yarnpkg/yarn/releases/download/v$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
   && mkdir -p /opt /opt/hostedtoolcache \
   && chmod -R 777 /opt/hostedtoolcache \
@@ -115,7 +118,7 @@ RUN if [ "$type" = "full" ]; then DOCKER_PACKAGES= && set -ex \
       && for tool in php phar phar.phar php-cgi php-config phpize phpdbg; do \
            { [ -e /usr/bin/"$tool"8.4 ] && sudo update-alternatives --set $tool /usr/bin/"$tool"8.4 || true; } \
          done \
-      && rm -rf /var/lib/apt/lists/* \
+      && rm -rf /var/lib/apt/lists/* /tmp/* /var/cache/* /usr/share/doc/* /usr/share/man/* \
       && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
       && find /usr/local -type f -executable -exec ldd '{}' ';' \
         | awk '/=>/ { print $(NF-1) }' \
