@@ -27,6 +27,13 @@ Docker images to run setup-php GitHub Action.
 - Node.js 24.11.0, 22.21.1 (armv7l), 16.20.2 (x86)
 - Yarn 1.22.19
 
+### `trixie`, `13`
+
+- Debian 13 (trixie)
+- PHP 5.6 to PHP 8.4
+- Node.js 24.11.0, 22.21.1 (armv7l), 16.20.2 (x86)
+- Yarn 1.22.19
+
 ### `bookworm`, `12`
 
 - Debian 12 (bookworm)
@@ -58,6 +65,12 @@ Docker images to run setup-php GitHub Action.
 ### `latest-slim`
 
 - Ubuntu 24.04 (jammy)), Debian 12 (bookworm) on i386
+- Node.js 24.11.0, 22.21.1 (armv7l), 16.20.2 (x86)
+- Yarn 1.22.19
+
+### `trixie-slim`, `13-slim`
+
+- Debian 13 (trixie)
 - Node.js 24.11.0, 22.21.1 (armv7l), 16.20.2 (x86)
 - Yarn 1.22.19
 
