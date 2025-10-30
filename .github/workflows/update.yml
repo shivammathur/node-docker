@@ -25,8 +25,8 @@ jobs:
         branch: update-branch
         branch-suffix: short-commit-hash
         base: main
-        commit-message: "Bump Node.js version to ${{ steps.update.outputs.version }}"
-        title: "Bump Node.js version to ${{ steps.update.outputs.version }}"
+        commit-message: "${{ steps.update.outputs.commit_message || format('Bump Node.js version to {0}', steps.update.outputs.version) }}"
+        title: "${{ steps.update.outputs.pr_title || format('Bump Node.js version to {0}', steps.update.outputs.version) }}"
         delete-branch: true
     - name: Auto approve and merge
       if: steps.cpr.outputs.pull-request-operation == 'created'
