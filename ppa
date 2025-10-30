@@ -15,6 +15,27 @@ get() {
   fi
 }
 
+
+get_sources_format() {
+  if [ -n "$sources_format" ]; then
+    echo "$sources_format"
+    return
+  fi
+  sources_format=deb
+  if [ -e "$list_dir"/ubuntu.sources ] || [ -e "$list_dir"/debian.sources ]; then
+    sources_format="deb822"
+  elif ! [[ "$ID" =~ ubuntu|debian ]]; then
+    find "$list_dir" -type f -name '*.sources' | grep -q . && sources_format="deb822"
+  fi
+  echo "$sources_format"
+}
+
+merge_components() {
+  local out=() t
+  for t in $1 $2; do [[ $t && " ${out[*]} " != *" $t "* ]] && out+=("$t"); done
+  printf '%s\n' "${out[*]}"
+}
+
 get_launchpad_key() {
   local pa=$1
   local key_file=$2
@@ -41,10 +62,35 @@ add_ppa() {
   local branches=$2
   ppa_url="https://ppa.launchpadcontent.net/$ppa/ubuntu"
   key_file=/usr/share/keyrings/"${ppa/\//-}"-keyring.gpg
-  list_dir=/etc/apt/sources.list.d
   get_launchpad_key "$ppa" "$key_file"
-  . /etc/os-release
-  echo "deb [arch="$(dpkg --print-architecture)" signed-by=$key_file] $ppa_url $VERSION_CODENAME $branches" | tee -a "$list_dir"/"${ppa%%/*}"-"$ID"-"${ppa#*/}"-"$VERSION_CODENAME".list
+  list_format="$(get_sources_format)"
+  local list_basename="${ppa%%/*}"-"$ID"-"${ppa#*/}"-"$VERSION_CODENAME"
+  local list_path
+  local components="$branches"
+  if [ "$list_format" = "deb822" ]; then
+    list_path="$list_dir"/"$list_basename".sources
+    if [ -e "$list_path" ]; then
+      local current_components
+      current_components="$(grep -E '^Components:' "$list_path" | head -n 1 | cut -d ':' -f 2 | xargs)"
+      components="$(merge_components "$current_components" "$branches")"
+    fi
+    [ -n "$components" ] || components="$branches"
+    cat <<EOF | sudo tee "$list_path" >/dev/null
+Types: deb
+URIs: $ppa_url
+Suites: $VERSION_CODENAME
+Components: $components
+Architectures: $arch
+Signed-By: $key_file
+EOF
+  else
+    list_path="$list_dir"/"$list_basename".list
+    echo "deb [arch=$arch signed-by=$key_file] $ppa_url $VERSION_CODENAME $components" | sudo tee -a "$list_path" >/dev/null 2>&1
+  fi
 }
 
+. /etc/os-release
+list_dir=/etc/apt/sources.list.d
+sources_format=
+arch=$(dpkg --print-architecture)
 add_ppa "$1" "$2"
