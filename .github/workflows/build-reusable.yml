@@ -1,7 +1,12 @@
-name: Build
+name: Build Matrix
+
 on:
-  pull_request:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      vendor:
+        required: true
+        type: string
+
 jobs:
   get-matrix:
     runs-on: ubuntu-latest
@@ -10,16 +15,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: output matrix
         id: set-matrix
+        env:
+          INCLUDE_VENDOR: ${{ inputs.vendor }}
         run: bash .github/scripts/get-matrix.sh
+
   build:
     needs: get-matrix
-    if: "!contains(github.event.head_commit.message, 'skip-build')"
-    name: Build
+    if: ${{ !contains(github.event.head_commit.message || '', 'skip-build') }}
+    name: Build (${{ inputs.vendor }})
     strategy:
       fail-fast: false
-      matrix: ${{fromJson(needs.get-matrix.outputs.matrix)}}
+      matrix: ${{ fromJson(needs.get-matrix.outputs.matrix) }}
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout
@@ -55,7 +64,9 @@ jobs:
           file: ./Dockerfile_${{ matrix.file }}
           platforms: ${{ steps.prep.outputs.multi }}
           tags: ${{ steps.prep.outputs.tags }}
-          build-args: ${{ matrix.build_args }}
+          build-args: |
+            ${{ matrix.build_args }}
+            ${{ matrix.php_build_arg }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -67,9 +78,12 @@ jobs:
           file: ./Dockerfile_${{ matrix.file }}
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.prep.outputs.ptags }}
-          build-args: ${{ matrix.build_args }}
+          build-args: |
+            ${{ matrix.build_args }}
+            ${{ matrix.php_build_arg }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
   description:
     runs-on: ubuntu-latest
     name: Description

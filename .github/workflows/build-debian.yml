@@ -1,0 +1,12 @@
+name: Build Debian
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-debian:
+    uses: ./.github/workflows/build-reusable.yml
+    with:
+      vendor: debian
+    secrets: inherit
