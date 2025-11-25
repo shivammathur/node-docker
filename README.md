@@ -23,42 +23,42 @@ Docker images to run setup-php GitHub Action.
 ### `latest`
 
 - Ubuntu 24.04 (noble), Debian 12 (bookworm) on i386
-- PHP 5.6 to PHP 8.4
+- PHP 5.6 to PHP 8.5
 - Node.js 24.11.1, 22.21.1 (armv7l), 16.20.2 (x86)
 - Yarn 1.22.22
 
 ### `trixie`, `13`
 
 - Debian 13 (trixie)
-- PHP 5.6 to PHP 8.4
+- PHP 5.6 to PHP 8.5
 - Node.js 24.11.1, 22.21.1 (armv7l), 16.20.2 (x86)
 - Yarn 1.22.22
 
 ### `bookworm`, `12`
 
 - Debian 12 (bookworm)
-- PHP 5.6 to PHP 8.4
+- PHP 5.6 to PHP 8.5
 - Node.js 24.11.1, 22.21.1 (armv7l), 16.20.2 (x86)
 - Yarn 1.22.22
 
 ### `bullseye`, `11`
 
 - Debian 11 (bullseye)
-- PHP 5.6 to PHP 8.4
+- PHP 5.6 to PHP 8.5
 - Node.js 24.11.1, 22.21.1 (armv7l), 16.20.2 (x86)
 - Yarn 1.22.22
 
 ### `noble`, `2404`
 
 - Ubuntu 22.04 (noble)
-- PHP 5.6 to PHP 8.4
+- PHP 5.6 to PHP 8.5
 - Node.js 24.11.1, 22.21.1 (armv7l)
 - Yarn 1.22.22
 
 ### `jammy`, `2204`
 
 - Ubuntu 22.04 (jammy)
-- PHP 5.6 to PHP 8.4
+- PHP 5.6 to PHP 8.5
 - Node.js 24.11.1, 22.21.1 (armv7l)
 - Yarn 1.22.22
 
@@ -89,6 +89,13 @@ Docker images to run setup-php GitHub Action.
 ### PHP version specific tags
 
 These tags install a single PHP release while keeping the same Node.js (24.11.0, 22.21.1 for armv7l, 16.20.2 for x86) and Yarn (1.22.19) versions listed above.
+
+#### PHP 8.5
+  - Ubuntu 24.04: `php-8.5-noble`, `php-8.5-24.04`
+  - Ubuntu 22.04: `php-8.5-jammy`, `php-8.5-22.04`
+  - Debian 13: `php-8.5-trixie`, `php-8.5-13`
+  - Debian 12: `php-8.5-bookworm`, `php-8.5-12`
+  - Debian 11: `php-8.5-bullseye`, `php-8.5-11`
 
 #### PHP 8.4
   - Ubuntu 24.04: `php-8.4-noble`, `php-8.4-24.04`
