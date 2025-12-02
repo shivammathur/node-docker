@@ -36,9 +36,10 @@ merge_components() {
   printf '%s\n' "${out[*]}"
 }
 
-get_launchpad_key() {
+add_key() {
   local pa=$1
   local key_file=$2
+  local key_source=$3
   sks=(
     'https://keyserver.ubuntu.com'
     'https://pgp.mit.edu'
@@ -47,10 +48,13 @@ get_launchpad_key() {
   lp_api=(
     'https://api.launchpad.net/1.0'
     'https://api.launchpad.net/devel'
-  )  
-  fingerprint="$(get -s "" "${lp_api[@]/%//~${ppa%/*}/+archive/ubuntu/${ppa##*/}}" | jq -r '.signing_key_fingerprint')"
-  sks_params="op=get&options=mr&exact=on&search=0x$fingerprint"
-  key_urls=("${sks[@]/%/\/pks\/lookup\?"$sks_params"}")
+  )
+  key_urls=("$key_source")
+  if [[ "$key_source" =~ launchpadcontent.net ]]; then
+    fingerprint="$(get -s "" "${lp_api[@]/%//~${ppa%/*}/+archive/ubuntu/${ppa##*/}}" | jq -r '.signing_key_fingerprint')"
+    sks_params="op=get&options=mr&exact=on&search=0x$fingerprint"
+    key_urls=("${sks[@]/%/\/pks\/lookup\?"$sks_params"}")
+  fi
   get -q "$key_file" "${key_urls[@]}"
   if [[ "$(file "$key_file")" =~ .*('Public-Key (old)'|'Secret-Key') ]]; then
     gpg --batch --yes --dearmor "$key_file" && mv "$key_file".gpg "$key_file"
@@ -60,9 +64,10 @@ get_launchpad_key() {
 add_ppa() {
   local ppa=$1
   local branches=$2
-  ppa_url="https://ppa.launchpadcontent.net/$ppa/ubuntu"
+  local ppa_url=${3:-"https://ppa.launchpadcontent.net/$ppa/ubuntu"}
+  local key_source=${4:-"$ppa_url"}
   key_file=/usr/share/keyrings/"${ppa/\//-}"-keyring.gpg
-  get_launchpad_key "$ppa" "$key_file"
+  add_key "$ppa" "$key_file" "$key_source"
   list_format="$(get_sources_format)"
   local list_basename="${ppa%%/*}"-"$ID"-"${ppa#*/}"-"$VERSION_CODENAME"
   local list_path
@@ -93,4 +98,4 @@ EOF
 list_dir=/etc/apt/sources.list.d
 sources_format=
 arch=$(dpkg --print-architecture)
-add_ppa "$1" "$2"
+add_ppa "$1" "$2" "$3" "$4"

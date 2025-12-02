@@ -89,13 +89,13 @@ RUN if [ "$type" = "full" ]; then DOCKER_PACKAGES= && set -ex \
      fi \
       && savedAptMark="$(apt-mark showmanual)" \
       && apt-mark auto '.*' > /dev/null \
-      && apt-get update && apt-get install -y --no-install-recommends curl gnupg jq lsb-release mariadb-server postgresql unzip \
+      && apt-get update && apt-get install -y --no-install-recommends curl file gnupg jq lsb-release mariadb-server postgresql unzip \
       && usermod -d /var/lib/mysql/ mysql \
-      && curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg \
-      && curl -sSLo /usr/share/keyrings/deb.sury.org-apache2.gpg https://packages.sury.org/apache2/apt.gpg \
-      && echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" > /etc/apt/sources.list.d/php.list \
-      && echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-apache2.gpg] https://packages.sury.org/apache2/ bookworm main" > /etc/apt/sources.list.d/apache2.list \
       && install -m 0755 -d /etc/apt/keyrings \
+      && curl -o /usr/local/bin/ppa -sL https://raw.githubusercontent.com/shivammathur/node-docker/main/ppa \
+      && chmod a+x /usr/local/bin/ppa \
+      && ppa ondrej/php main https://packages.sury.org/php/ https://packages.sury.org/php/apt.gpg \
+      && ppa ondrej/apache2 main https://packages.sury.org/apache2/ https://packages.sury.org/apache2/apt.gpg \
       && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
       && chmod a+r /etc/apt/keyrings/docker.gpg \
       && echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian bookworm stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
