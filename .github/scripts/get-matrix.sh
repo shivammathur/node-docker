@@ -67,6 +67,10 @@ for platform in "${platforms[@]}"; do
       continue
     fi
 
+    if [ "$platform" = "linux/386" ] && [ "$php_version" = "8.5" ]; then
+      continue
+    fi
+
     runner="ubuntu-latest"
     if [ "$platform" = "linux/arm64" ] || [ "$platform" = "linux/arm/v7" ] || [ "$platform" = "multi" ]; then
       runner="ubuntu-24.04-arm"
@@ -74,7 +78,11 @@ for platform in "${platforms[@]}"; do
 
     php_build_arg=""
     if [ -n "$php_version" ]; then
-      php_build_arg="PHP_VERSION=$php_version"
+      if [ "$platform" = "multi" ] && [ "$php_version" = "8.5" ]; then
+        php_build_arg=""
+      else
+        php_build_arg="PHP_VERSION=$php_version"
+      fi
     fi
 
     build_args="type=$build_type"
