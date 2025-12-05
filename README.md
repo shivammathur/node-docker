@@ -14,7 +14,6 @@ Docker images to run setup-php GitHub Action.
 ## Platforms/OS Architecture
 
 - `linux/amd64` or `amd64`
-- `linux/386` or `i386`
 - `linux/arm/v7` or `arm32v7`
 - `linux/arm64` or `arm64v8`
 
@@ -22,30 +21,30 @@ Docker images to run setup-php GitHub Action.
 
 ### `latest`
 
-- Ubuntu 24.04 (noble), Debian 12 (bookworm) on i386
+- Ubuntu 24.04 (noble), Debian 12 (bookworm)
 - PHP 5.6 to PHP 8.5
-- Node.js 24.11.1, 22.21.1 (armv7l), 16.20.2 (x86)
+- Node.js 24.11.1, 22.21.1 (armv7l)
 - Yarn 1.22.22
 
 ### `trixie`, `13`
 
 - Debian 13 (trixie)
 - PHP 5.6 to PHP 8.5
-- Node.js 24.11.1, 22.21.1 (armv7l), 16.20.2 (x86)
+- Node.js 24.11.1, 22.21.1 (armv7l)
 - Yarn 1.22.22
 
 ### `bookworm`, `12`
 
 - Debian 12 (bookworm)
 - PHP 5.6 to PHP 8.5
-- Node.js 24.11.1, 22.21.1 (armv7l), 16.20.2 (x86)
+- Node.js 24.11.1, 22.21.1 (armv7l)
 - Yarn 1.22.22
 
 ### `bullseye`, `11`
 
 - Debian 11 (bullseye)
 - PHP 5.6 to PHP 8.5
-- Node.js 24.11.1, 22.21.1 (armv7l), 16.20.2 (x86)
+- Node.js 24.11.1, 22.21.1 (armv7l)
 - Yarn 1.22.22
 
 ### `noble`, `2404`
@@ -64,14 +63,14 @@ Docker images to run setup-php GitHub Action.
 
 ### `latest-slim`
 
-- Ubuntu 24.04 (jammy)), Debian 12 (bookworm) on i386
-- Node.js 24.11.1, 22.21.1 (armv7l), 16.20.2 (x86)
+- Ubuntu 24.04 (jammy)), Debian 12 (bookworm)
+- Node.js 24.11.1, 22.21.1 (armv7l)
 - Yarn 1.22.22
 
 ### `trixie-slim`, `13-slim`
 
 - Debian 13 (trixie)
-- Node.js 24.11.1, 22.21.1 (armv7l), 16.20.2 (x86)
+- Node.js 24.11.1, 22.21.1 (armv7l)
 - Yarn 1.22.22
 
 ### `noble-slim`, `2404-slim`
@@ -88,7 +87,7 @@ Docker images to run setup-php GitHub Action.
 
 ### PHP version specific tags
 
-These tags install a single PHP release while keeping the same Node.js (24.11.0, 22.21.1 for armv7l, 16.20.2 for x86) and Yarn (1.22.19) versions listed above.
+These tags install a single PHP release while keeping the same Node.js (24.11.1, 22.21.1 for armv7l) and Yarn (1.22.22) versions listed above.
 
 #### PHP 8.5
   - Ubuntu 24.04: `php-8.5-noble`, `php-8.5-24.04`
@@ -176,11 +175,9 @@ These tags install a single PHP release while keeping the same Node.js (24.11.0,
 
 ## Platform/OS Architecture specific tags
 
-- Suffix `amd64`, `i386`, `arm32v7` `arm64v8` to above image variants to get image for specific OS architecture.
+- Suffix `amd64`, `arm32v7`, `arm64v8` to above image variants to get image for specific OS architecture.
 For example `shivammathur/node:noble-arm64v8`, `setupphp/node:noble-arm64v8`
 
-- `i386` is only available for Debian images.
-- `i386` builds are limited to Node.js 16.x, newer versions won't be added for this architecture.
 - `arm32v7` builds are limited to Node.js 22.x, newer major versions won't be added for this architecture.
 
 ## Build Arguments

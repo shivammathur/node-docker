@@ -5,7 +5,6 @@ ENV CONTAINER=shivammathur/node
 ENV DEBIAN_FRONTEND=noninteractive
 ENV NODE_VERSION=24.11.1
 ENV NODE_VERSION_ARM32=22.21.1
-ENV NODE_VERSION_x86=16.20.2
 ENV YARN_VERSION=1.22.22
 ENV RUNNER_TOOL_PATH="/opt/hostedtoolcache"
 ENV RUNNER_TOOL_CACHE="/opt/hostedtoolcache"
@@ -13,9 +12,7 @@ ENV GITHUB_ENV="/tmp/set_env"
 ENV GITHUB_PATH="/tmp/add_path"
 ENV runner="self-hosted"
 ENV PHP_VERSION_ALL="5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1 8.2 8.3 8.4 8.5"
-ENV PHP_VERSION_ALL_i386="5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1 8.2 8.3 8.4"
 ENV PHP_VERSION_DEFAULT="8.5"
-ENV PHP_VERSION_DEFAULT_i386="8.4"
 
 RUN ARCH= && MULTILIB= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --print-architecture)" \
   && case "${dpkgArch##*-}" in \
@@ -24,7 +21,6 @@ RUN ARCH= && MULTILIB= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --p
     s390x) ARCH='s390x';; \
     arm64) ARCH='arm64';; \
     armhf) ARCH='armv7l'; NODE_VERSION=$NODE_VERSION_ARM32;; \
-    i386) ARCH='x86'; MULTILIB='gcc-multilib'; PREFIX='unofficial-builds'; URLPATH='download/release'; NODE_VERSION=$NODE_VERSION_x86;; \
     *) echo "unsupported architecture"; exit 1 ;; \
   esac \
   && set -ex \
@@ -86,10 +82,6 @@ RUN set -ex \
 RUN if [ "$type" = "full" ]; then set -ex \
   && PHP_VERSIONS="$PHP_VERSION_ALL" \
   && DEFAULT_PHP_VERSION="$PHP_VERSION_DEFAULT" \
-  && if [ "$(dpkg --print-architecture)" = "i386" ]; then \
-       PHP_VERSIONS="$PHP_VERSION_ALL_i386"; \
-       DEFAULT_PHP_VERSION="$PHP_VERSION_DEFAULT_i386"; \
-     fi \
   && if [ "${PHP_VERSION:-all}" != "all" ]; then \
        PHP_VERSIONS="$PHP_VERSION"; \
        DEFAULT_PHP_VERSION="$PHP_VERSION"; \

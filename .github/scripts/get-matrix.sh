@@ -8,7 +8,7 @@ declare -A base_map=(
   [jammy]='ubuntu:22.04'
 )
 
-platforms=(linux/386 linux/amd64 linux/arm/v7 linux/arm64 multi)
+platforms=(linux/amd64 linux/arm/v7 linux/arm64 multi)
 
 include_vendor="${INCLUDE_VENDOR:-}"
 
@@ -53,21 +53,7 @@ for platform in "${platforms[@]}"; do
     base="${base_map[$file]}"
     vendor="${base%%:*}"
 
-    if [[ "$tag" == latest* ]] && [ "$platform" = "linux/386" ]; then
-      file="bookworm"
-      base="${base_map[$file]}"
-      vendor="${base%%:*}"
-    fi
-
-    if [ "$platform" = "linux/386" ] && [[ "$file" != "bookworm" && "$file" != "bullseye" ]]; then
-      continue
-    fi
-
     if [ -n "$include_vendor" ] && [ "$vendor" != "$include_vendor" ]; then
-      continue
-    fi
-
-    if [ "$platform" = "linux/386" ] && [ "$php_version" = "8.5" ]; then
       continue
     fi
 
@@ -78,11 +64,7 @@ for platform in "${platforms[@]}"; do
 
     php_build_arg=""
     if [ -n "$php_version" ]; then
-      if [ "$platform" = "multi" ] && [ "$php_version" = "8.5" ]; then
-        php_build_arg=""
-      else
-        php_build_arg="PHP_VERSION=$php_version"
-      fi
+      php_build_arg="PHP_VERSION=$php_version"
     fi
 
     build_args="type=$build_type"
