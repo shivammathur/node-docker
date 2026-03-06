@@ -49,7 +49,7 @@ Docker images to run setup-php GitHub Action.
 
 ### `noble`, `2404`
 
-- Ubuntu 22.04 (noble)
+- Ubuntu 24.04 (noble)
 - PHP 5.6 to PHP 8.5
 - Node.js 24.14.0, 22.22.1 (armv7l)
 - Yarn 1.22.22
@@ -63,7 +63,7 @@ Docker images to run setup-php GitHub Action.
 
 ### `latest-slim`
 
-- Ubuntu 24.04 (jammy)), Debian 12 (bookworm)
+- Ubuntu 24.04 (jammy), Debian 12 (bookworm)
 - Node.js 24.14.0, 22.22.1 (armv7l)
 - Yarn 1.22.22
 
