@@ -6,6 +6,10 @@ on:
       vendor:
         required: true
         type: string
+      version:
+        required: false
+        type: string
+        default: all
 
 jobs:
   get-matrix:
@@ -20,6 +24,7 @@ jobs:
         id: set-matrix
         env:
           INCLUDE_VENDOR: ${{ inputs.vendor }}
+          INCLUDE_VERSION: ${{ inputs.version }}
         run: bash .github/scripts/get-matrix.sh
 
   build:

@@ -3,10 +3,22 @@ name: Build Debian
 on:
   pull_request:
   workflow_dispatch:
+    inputs:
+      version:
+        description: Debian version to build
+        required: false
+        type: choice
+        default: all
+        options:
+          - all
+          - trixie
+          - bookworm
+          - bullseye
 
 jobs:
   build-debian:
     uses: ./.github/workflows/build-reusable.yml
     with:
       vendor: debian
+      version: ${{ inputs.version || 'all' }}
     secrets: inherit

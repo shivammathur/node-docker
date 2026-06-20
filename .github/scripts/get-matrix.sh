@@ -9,9 +9,44 @@ declare -A base_map=(
   [jammy]='ubuntu:22.04'
 )
 
+declare -A version_map=(
+  [trixie]='trixie'
+  [13]='trixie'
+  [bookworm]='bookworm'
+  [12]='bookworm'
+  [bullseye]='bullseye'
+  [11]='bullseye'
+  [resolute]='resolute'
+  [2604]='resolute'
+  [26.04]='resolute'
+  [noble]='noble'
+  [2404]='noble'
+  [24.04]='noble'
+  [jammy]='jammy'
+  [2204]='jammy'
+  [22.04]='jammy'
+)
+
 platforms=(linux/amd64 linux/arm/v7 linux/arm64 multi)
 
 include_vendor="${INCLUDE_VENDOR:-}"
+include_version="${INCLUDE_VERSION:-all}"
+include_version="${include_version,,}"
+include_version="${include_version// /}"
+include_distro=""
+
+if [ -n "$include_version" ] && [ "$include_version" != "all" ]; then
+  if [ -z "${version_map[$include_version]+x}" ]; then
+    echo "::error::Unsupported distro version '$INCLUDE_VERSION'" >&2
+    exit 1
+  fi
+  include_distro="${version_map[$include_version]}"
+  include_distro_vendor="${base_map[$include_distro]%%:*}"
+  if [ -n "$include_vendor" ] && [ "$include_distro_vendor" != "$include_vendor" ]; then
+    echo "::error::Distro version '$INCLUDE_VERSION' is $include_distro_vendor, not $include_vendor" >&2
+    exit 1
+  fi
+fi
 
 tag_specs=(
   "latest|noble|full|"
@@ -60,6 +95,10 @@ for platform in "${platforms[@]}"; do
       continue
     fi
 
+    if [ -n "$include_distro" ] && [ "$file" != "$include_distro" ]; then
+      continue
+    fi
+
     runner="ubuntu-latest"
     if [ "$platform" = "linux/arm64" ] || [ "$platform" = "linux/arm/v7" ] || [ "$platform" = "multi" ]; then
       runner="ubuntu-24.04-arm"
@@ -74,6 +113,11 @@ for platform in "${platforms[@]}"; do
     matrix+=("{\"platform\": \"$platform\", \"tags\": \"$tag\", \"base\": \"$base\", \"build_args\": \"$build_args\", \"file\": \"$file\", \"runner\": \"$runner\", \"php_build_arg\": \"$php_build_arg\"}")
   done
 done
+
+if [ "${#matrix[@]}" -eq 0 ]; then
+  echo "::error::No builds matched the requested filters" >&2
+  exit 1
+fi
 
 joined=$(printf '%s,' "${matrix[@]}")
 echo "matrix={\"include\":[${joined%,}]}" >> "$GITHUB_OUTPUT"

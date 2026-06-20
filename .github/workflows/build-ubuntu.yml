@@ -3,10 +3,22 @@ name: Build Ubuntu
 on:
   pull_request:
   workflow_dispatch:
+    inputs:
+      version:
+        description: Ubuntu version to build
+        required: false
+        type: choice
+        default: all
+        options:
+          - all
+          - resolute
+          - noble
+          - jammy
 
 jobs:
   build-ubuntu:
     uses: ./.github/workflows/build-reusable.yml
     with:
       vendor: ubuntu
+      version: ${{ inputs.version || 'all' }}
     secrets: inherit
