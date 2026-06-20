@@ -1,0 +1,150 @@
+FROM ubuntu:resolute
+ARG type
+ARG PHP_VERSION=all
+ENV CONTAINER=shivammathur/node
+ENV DEBIAN_FRONTEND=noninteractive
+ENV NODE_VERSION=24.17.0
+ENV NODE_VERSION_ARM32=22.23.0
+ENV YARN_VERSION=1.22.22
+ENV RUNNER_TOOL_PATH="/opt/hostedtoolcache"
+ENV RUNNER_TOOL_CACHE="/opt/hostedtoolcache"
+ENV GITHUB_ENV="/tmp/set_env"
+ENV GITHUB_PATH="/tmp/add_path"
+ENV runner="self-hosted"
+ENV PHP_VERSION_ALL="5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1 8.2 8.3 8.4 8.5"
+ENV PHP_VERSION_DEFAULT="8.5"
+
+RUN ARCH= && MULTILIB= && PREFIX='www' && URLPATH='dist' && dpkgArch="$(dpkg --print-architecture)" \
+  && case "${dpkgArch##*-}" in \
+    amd64) ARCH='x64';; \
+    ppc64el) ARCH='ppc64le';; \
+    s390x) ARCH='s390x';; \
+    arm64) ARCH='arm64';; \
+    armhf) ARCH='armv7l'; NODE_VERSION=$NODE_VERSION_ARM32;; \
+    *) echo "unsupported architecture"; exit 1 ;; \
+  esac \
+  && set -ex \
+  && : > "$GITHUB_ENV" \
+  && : > "$GITHUB_PATH" \
+  && mkdir -p "$RUNNER_TOOL_CACHE" \
+  # libatomic1 for arm
+  && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr xz-utils libatomic1 $MULTILIB --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/cache/* /usr/share/doc/* /usr/share/man/* \
+  && curl -fsSLO --compressed "https://$PREFIX.nodejs.org/$URLPATH/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
+  && tar -xJf "node-v$NODE_VERSION-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
+  && rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz" \
+  && curl -fsSL https://github.com/shivammathur/spc/releases/latest/download/spc -o /tmp/spc \
+  && curl -fsSL https://raw.githubusercontent.com/shivammathur/node-docker/main/systemctl-shim -o /tmp/systemctl \
+  && install -m 0755 /tmp/spc /usr/local/bin/spc \
+  && install -m 0755 /tmp/systemctl /usr/local/bin/systemctl \
+  && rm /tmp/spc /tmp/systemctl \
+  && apt-mark auto '.*' > /dev/null \
+  && apt-mark manual curl libatomic1 $MULTILIB \
+  && find /usr/local -type f -executable -exec ldd '{}' ';' \
+    | awk '/=>/ { print $(NF-1) }' \
+    | sort -u \
+    | xargs -r dpkg-query --search \
+    | cut -d: -f1 \
+    | sort -u \
+    | xargs -r apt-mark manual \
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
+  # smoke tests
+  && node --version \
+  && npm --version \
+  && spc -V
+
+RUN set -ex \
+  && savedAptMark="$(apt-mark showmanual)" \
+  && apt-get update && apt-get install -y ca-certificates curl wget gnupg dirmngr make sudo --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/cache/* /usr/share/doc/* /usr/share/man/* \
+  && curl -fsSLO --compressed "https://github.com/yarnpkg/yarn/releases/download/v$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
+  && mkdir -p /opt /opt/hostedtoolcache \
+  && chmod -R 777 /opt/hostedtoolcache \
+  && tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/ \
+  && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
+  && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
+  && rm yarn-v$YARN_VERSION.tar.gz \
+  && apt-mark auto '.*' > /dev/null \
+  && apt-mark manual ca-certificates sudo make \
+  && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
+  && find /usr/local -type f -executable -exec ldd '{}' ';' \
+    | awk '/=>/ { print $(NF-1) }' \
+    | sort -u \
+    | xargs -r dpkg-query --search \
+    | cut -d: -f1 \
+    | sort -u \
+    | xargs -r apt-mark manual \
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+  # smoke test
+  && yarn --version
+
+RUN if [ "$type" = "full" ]; then set -ex \
+  && PHP_VERSIONS="$PHP_VERSION_ALL" \
+  && DEFAULT_PHP_VERSION="$PHP_VERSION_DEFAULT" \
+  && if [ "${PHP_VERSION:-all}" != "all" ]; then \
+       PHP_VERSIONS="$PHP_VERSION"; \
+       DEFAULT_PHP_VERSION="$PHP_VERSION"; \
+     fi \
+      && savedAptMark="$(apt-mark showmanual)" \
+      && apt-mark auto '.*' > /dev/null \
+      && apt-get update && apt-get install -y --no-install-recommends curl file gnupg jq lsb-release mysql-server postgresql unzip \
+      && usermod -d /var/lib/mysql/ mysql \
+      && curl -o /usr/local/bin/ppa -sL https://raw.githubusercontent.com/shivammathur/node-docker/main/ppa \
+      && chmod a+x /usr/local/bin/ppa \
+      && ppa git-core/ppa main \
+      && ppa ondrej/php main https://packages.sury.org/php/ https://packages.sury.org/php/apt.gpg \
+      && ppa ondrej/apache2 main https://packages.sury.org/apache2/ https://packages.sury.org/apache2/apt.gpg \
+      && install -m 0755 -d /etc/apt/keyrings \
+      && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+      && chmod a+r /etc/apt/keyrings/docker.gpg \
+      && echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu resolute stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
+      && apt-get update \
+      && cp -r /etc/apt/sources.list.d /etc/apt/sources.list.d.save \
+      && for v in $PHP_VERSIONS; do \
+           apt-get install -y --no-install-recommends php"$v" \
+           php"$v"-dev \
+           php"$v"-curl \
+           php"$v"-mbstring \
+           php"$v"-xml \
+           php"$v"-intl \
+           php"$v"-mysql \
+           php"$v"-pgsql \
+           php"$v"-zip; \
+         done \
+      && curl -o /usr/bin/systemctl -sL https://raw.githubusercontent.com/shivammathur/node-docker/main/systemctl-shim \
+      && chmod a+x /usr/bin/systemctl \
+      && curl -o /usr/lib/ssl/cert.pem -sL https://curl.se/ca/cacert.pem \
+      && curl -o /tmp/pear.phar -sL https://raw.githubusercontent.com/pear/pearweb_phars/master/install-pear-nozlib.phar \
+      && php /tmp/pear.phar && sudo rm -f /tmp/pear.phar \
+    && apt-get install -y --no-install-recommends autoconf automake gcc g++ git \
+    && apt-get install -y --no-install-recommends docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
+    && for v in $PHP_VERSIONS; do \
+        apt-get install -y --no-install-recommends php"$v"-xdebug 2>/dev/null || (spc -p "$v" -e xdebug-xdebug/xdebug@master -r verbose) \
+      && apt-get install -y --no-install-recommends php"$v"-imagick 2>/dev/null || (IMAGICK_LIBS=libmagickwand-dev spc -p "$v" -e imagick-imagick/imagick@master -r verbose); \
+      done \
+    && for tool in php phar phar.phar php-cgi php-config phpize phpdbg; do \
+        { [ -e /usr/bin/"$tool""$DEFAULT_PHP_VERSION" ] && sudo update-alternatives --set $tool /usr/bin/"$tool""$DEFAULT_PHP_VERSION" || true; } \
+      done \
+      && rm -rf /var/lib/apt/lists/* /tmp/* /var/cache/* /usr/share/doc/* /usr/share/man/* \
+      && { [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark > /dev/null; } \
+      && find /usr/local -type f -executable -exec ldd '{}' ';' \
+        | awk '/=>/ { print $(NF-1) }' \
+        | sort -u \
+        | xargs -r dpkg-query --search \
+        | cut -d: -f1 \
+        | sort -u \
+        | xargs -r apt-mark manual \
+      && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+      # smoke test
+      && gcc --version \
+      && g++ --version \
+      && git --version \
+      && docker --version \
+      && for v in $PHP_VERSIONS; do \
+           php"$v" -v; \
+         done \
+      && php -v; \
+    fi
+
+CMD [ "/bin/bash" ]

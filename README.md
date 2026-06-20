@@ -47,6 +47,13 @@ Docker images to run setup-php GitHub Action.
 - Node.js 24.17.0, 22.23.0 (armv7l)
 - Yarn 1.22.22
 
+### `resolute`, `2604`
+
+- Ubuntu 26.04 (resolute)
+- PHP 5.6 to PHP 8.5
+- Node.js 24.17.0, 22.23.0 (armv7l)
+- Yarn 1.22.22
+
 ### `noble`, `2404`
 
 - Ubuntu 24.04 (noble)
@@ -63,7 +70,7 @@ Docker images to run setup-php GitHub Action.
 
 ### `latest-slim`
 
-- Ubuntu 24.04 (jammy), Debian 12 (bookworm)
+- Ubuntu 24.04 (noble), Debian 12 (bookworm)
 - Node.js 24.17.0, 22.23.0 (armv7l)
 - Yarn 1.22.22
 
@@ -73,9 +80,15 @@ Docker images to run setup-php GitHub Action.
 - Node.js 24.17.0, 22.23.0 (armv7l)
 - Yarn 1.22.22
 
+### `resolute-slim`, `2604-slim`
+
+- Ubuntu 26.04 (resolute)
+- Node.js 24.17.0, 22.23.0 (armv7l)
+- Yarn 1.22.22
+
 ### `noble-slim`, `2404-slim`
 
-- Ubuntu 24.04 (jammy)
+- Ubuntu 24.04 (noble)
 - Node.js 24.17.0, 22.23.0 (armv7l)
 - Yarn 1.22.22
 
@@ -87,9 +100,10 @@ Docker images to run setup-php GitHub Action.
 
 ### PHP version specific tags
 
-These tags install a single PHP release while keeping the same Node.js (24.11.1, 22.21.1 for armv7l) and Yarn (1.22.22) versions listed above.
+These tags install a single PHP release while keeping the same Node.js (24.17.0, 22.23.0 for armv7l) and Yarn (1.22.22) versions listed above.
 
 #### PHP 8.5
+  - Ubuntu 26.04: `php-8.5-resolute`, `php-8.5-26.04`
   - Ubuntu 24.04: `php-8.5-noble`, `php-8.5-24.04`
   - Ubuntu 22.04: `php-8.5-jammy`, `php-8.5-22.04`
   - Debian 13: `php-8.5-trixie`, `php-8.5-13`
@@ -97,6 +111,7 @@ These tags install a single PHP release while keeping the same Node.js (24.11.1,
   - Debian 11: `php-8.5-bullseye`, `php-8.5-11`
 
 #### PHP 8.4
+  - Ubuntu 26.04: `php-8.4-resolute`, `php-8.4-26.04`
   - Ubuntu 24.04: `php-8.4-noble`, `php-8.4-24.04`
   - Ubuntu 22.04: `php-8.4-jammy`, `php-8.4-22.04`
   - Debian 13: `php-8.4-trixie`, `php-8.4-13`
@@ -104,6 +119,7 @@ These tags install a single PHP release while keeping the same Node.js (24.11.1,
   - Debian 11: `php-8.4-bullseye`, `php-8.4-11`
 
 #### PHP 8.3
+  - Ubuntu 26.04: `php-8.3-resolute`, `php-8.3-26.04`
   - Ubuntu 24.04: `php-8.3-noble`, `php-8.3-24.04`
   - Ubuntu 22.04: `php-8.3-jammy`, `php-8.3-22.04`
   - Debian 13: `php-8.3-trixie`, `php-8.3-13`
@@ -111,6 +127,7 @@ These tags install a single PHP release while keeping the same Node.js (24.11.1,
   - Debian 11: `php-8.3-bullseye`, `php-8.3-11`
 
 #### PHP 8.2
+  - Ubuntu 26.04: `php-8.2-resolute`, `php-8.2-26.04`
   - Ubuntu 24.04: `php-8.2-noble`, `php-8.2-24.04`
   - Ubuntu 22.04: `php-8.2-jammy`, `php-8.2-22.04`
   - Debian 13: `php-8.2-trixie`, `php-8.2-13`
@@ -118,6 +135,7 @@ These tags install a single PHP release while keeping the same Node.js (24.11.1,
   - Debian 11: `php-8.2-bullseye`, `php-8.2-11`
 
 #### PHP 8.1
+  - Ubuntu 26.04: `php-8.1-resolute`, `php-8.1-26.04`
   - Ubuntu 24.04: `php-8.1-noble`, `php-8.1-24.04`
   - Ubuntu 22.04: `php-8.1-jammy`, `php-8.1-22.04`
   - Debian 13: `php-8.1-trixie`, `php-8.1-13`
@@ -125,6 +143,7 @@ These tags install a single PHP release while keeping the same Node.js (24.11.1,
   - Debian 11: `php-8.1-bullseye`, `php-8.1-11`
 
 #### PHP 8.0
+  - Ubuntu 26.04: `php-8.0-resolute`, `php-8.0-26.04`
   - Ubuntu 24.04: `php-8.0-noble`, `php-8.0-24.04`
   - Ubuntu 22.04: `php-8.0-jammy`, `php-8.0-22.04`
   - Debian 13: `php-8.0-trixie`, `php-8.0-13`
@@ -132,6 +151,7 @@ These tags install a single PHP release while keeping the same Node.js (24.11.1,
   - Debian 11: `php-8.0-bullseye`, `php-8.0-11`
 
 #### PHP 7.4
+  - Ubuntu 26.04: `php-7.4-resolute`, `php-7.4-26.04`
   - Ubuntu 24.04: `php-7.4-noble`, `php-7.4-24.04`
   - Ubuntu 22.04: `php-7.4-jammy`, `php-7.4-22.04`
   - Debian 13: `php-7.4-trixie`, `php-7.4-13`
@@ -139,6 +159,7 @@ These tags install a single PHP release while keeping the same Node.js (24.11.1,
   - Debian 11: `php-7.4-bullseye`, `php-7.4-11`
 
 #### PHP 7.3
+  - Ubuntu 26.04: `php-7.3-resolute`, `php-7.3-26.04`
   - Ubuntu 24.04: `php-7.3-noble`, `php-7.3-24.04`
   - Ubuntu 22.04: `php-7.3-jammy`, `php-7.3-22.04`
   - Debian 13: `php-7.3-trixie`, `php-7.3-13`
@@ -146,6 +167,7 @@ These tags install a single PHP release while keeping the same Node.js (24.11.1,
   - Debian 11: `php-7.3-bullseye`, `php-7.3-11`
 
 #### PHP 7.2
+  - Ubuntu 26.04: `php-7.2-resolute`, `php-7.2-26.04`
   - Ubuntu 24.04: `php-7.2-noble`, `php-7.2-24.04`
   - Ubuntu 22.04: `php-7.2-jammy`, `php-7.2-22.04`
   - Debian 13: `php-7.2-trixie`, `php-7.2-13`
@@ -153,6 +175,7 @@ These tags install a single PHP release while keeping the same Node.js (24.11.1,
   - Debian 11: `php-7.2-bullseye`, `php-7.2-11`
 
 #### PHP 7.1
+  - Ubuntu 26.04: `php-7.1-resolute`, `php-7.1-26.04`
   - Ubuntu 24.04: `php-7.1-noble`, `php-7.1-24.04`
   - Ubuntu 22.04: `php-7.1-jammy`, `php-7.1-22.04`
   - Debian 13: `php-7.1-trixie`, `php-7.1-13`
@@ -160,6 +183,7 @@ These tags install a single PHP release while keeping the same Node.js (24.11.1,
   - Debian 11: `php-7.1-bullseye`, `php-7.1-11`
 
 #### PHP 7.0
+  - Ubuntu 26.04: `php-7.0-resolute`, `php-7.0-26.04`
   - Ubuntu 24.04: `php-7.0-noble`, `php-7.0-24.04`
   - Ubuntu 22.04: `php-7.0-jammy`, `php-7.0-22.04`
   - Debian 13: `php-7.0-trixie`, `php-7.0-13`
@@ -167,6 +191,7 @@ These tags install a single PHP release while keeping the same Node.js (24.11.1,
   - Debian 11: `php-7.0-bullseye`, `php-7.0-11`
 
 #### PHP 5.6
+  - Ubuntu 26.04: `php-5.6-resolute`, `php-5.6-26.04`
   - Ubuntu 24.04: `php-5.6-noble`, `php-5.6-24.04`
   - Ubuntu 22.04: `php-5.6-jammy`, `php-5.6-22.04`
   - Debian 13: `php-5.6-trixie`, `php-5.6-13`
