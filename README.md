@@ -204,6 +204,7 @@ These tags install a single PHP release while keeping the same Node.js (24.17.0,
 For example `shivammathur/node:noble-arm64v8`, `setupphp/node:noble-arm64v8`
 
 - `arm32v7` builds are limited to Node.js 22.x, newer major versions won't be added for this architecture.
+- Ubuntu 26.04 `arm32v7` builds are available for slim and PHP 8.5 variants; older PHP variants are `amd64` and `arm64v8` only.
 
 ## Build Arguments
 

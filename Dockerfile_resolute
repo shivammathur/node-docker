@@ -88,7 +88,7 @@ RUN if [ "$type" = "full" ]; then set -ex \
      fi \
       && savedAptMark="$(apt-mark showmanual)" \
       && apt-mark auto '.*' > /dev/null \
-      && apt-get update && apt-get install -y --no-install-recommends curl file gnupg jq lsb-release mysql-server postgresql unzip \
+      && apt-get update && apt-get install -y --no-install-recommends curl file gnupg jq lsb-release mariadb-server postgresql unzip \
       && usermod -d /var/lib/mysql/ mysql \
       && curl -o /usr/local/bin/ppa -sL https://raw.githubusercontent.com/shivammathur/node-docker/main/ppa \
       && chmod a+x /usr/local/bin/ppa \

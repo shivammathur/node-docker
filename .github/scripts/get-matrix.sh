@@ -28,6 +28,7 @@ declare -A version_map=(
 )
 
 platforms=(linux/amd64 linux/arm/v7 linux/arm64 multi)
+default_multi_platforms='linux/amd64,linux/arm/v7,linux/arm64'
 
 include_vendor="${INCLUDE_VENDOR:-}"
 include_version="${INCLUDE_VERSION:-all}"
@@ -99,6 +100,12 @@ for platform in "${platforms[@]}"; do
       continue
     fi
 
+    multi_platforms="$default_multi_platforms"
+    if [ "$file" = "resolute" ] && [ "$build_type" = "full" ] && [ "${php_version:-all}" != "8.5" ]; then
+      [ "$platform" = "linux/arm/v7" ] && continue
+      multi_platforms='linux/amd64,linux/arm64'
+    fi
+
     runner="ubuntu-latest"
     if [ "$platform" = "linux/arm64" ] || [ "$platform" = "linux/arm/v7" ] || [ "$platform" = "multi" ]; then
       runner="ubuntu-24.04-arm"
@@ -110,7 +117,7 @@ for platform in "${platforms[@]}"; do
     fi
 
     build_args="type=$build_type"
-    matrix+=("{\"platform\": \"$platform\", \"tags\": \"$tag\", \"base\": \"$base\", \"build_args\": \"$build_args\", \"file\": \"$file\", \"runner\": \"$runner\", \"php_build_arg\": \"$php_build_arg\"}")
+    matrix+=("{\"platform\": \"$platform\", \"tags\": \"$tag\", \"base\": \"$base\", \"build_args\": \"$build_args\", \"file\": \"$file\", \"runner\": \"$runner\", \"php_build_arg\": \"$php_build_arg\", \"multi\": \"$multi_platforms\"}")
   done
 done
 

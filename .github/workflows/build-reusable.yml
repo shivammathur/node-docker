@@ -46,6 +46,7 @@ jobs:
           PLATFORM: ${{ matrix.platform }}
           TAGS: ${{ matrix.tags }}
           FILE: ${{ matrix.file }}
+          MULTI: ${{ matrix.multi }}
 
       - name: Set up Docker Buildx
         if: steps.prep.outcome == 'success'

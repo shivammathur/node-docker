@@ -11,7 +11,7 @@ ptags=$(echo "$TAGS" | awk -v platform="$platform" 'BEGIN{FS=OFS=","} NR==1{for 
 orgptags=$(echo "$TAGS" | awk -v platform="$platform" 'BEGIN{FS=OFS=","} NR==1{for (i=1;i<=NF;i++) $i="setupphp/node:"$i"-"platform} 1')
 key=$(echo -n "$tags $ptags" | openssl dgst -sha256 | cut -d ' ' -f 2)
 
-multi='linux/amd64,linux/arm/v7,linux/arm64'
+multi="${MULTI:-linux/amd64,linux/arm/v7,linux/arm64}"
 
 (
   echo "tags=${tags},${orgtags}";
