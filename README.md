@@ -23,79 +23,79 @@ Docker images to run setup-php GitHub Action.
 
 - Ubuntu 24.04 (noble), Debian 12 (bookworm)
 - PHP 5.6 to PHP 8.5
-- Node.js 24.17.0, 22.23.0 (armv7l)
+- Node.js 24.18.0, 22.23.1 (armv7l)
 - Yarn 1.22.22
 
 ### `trixie`, `13`
 
 - Debian 13 (trixie)
 - PHP 5.6 to PHP 8.5
-- Node.js 24.17.0, 22.23.0 (armv7l)
+- Node.js 24.18.0, 22.23.1 (armv7l)
 - Yarn 1.22.22
 
 ### `bookworm`, `12`
 
 - Debian 12 (bookworm)
 - PHP 5.6 to PHP 8.5
-- Node.js 24.17.0, 22.23.0 (armv7l)
+- Node.js 24.18.0, 22.23.1 (armv7l)
 - Yarn 1.22.22
 
 ### `bullseye`, `11`
 
 - Debian 11 (bullseye)
 - PHP 5.6 to PHP 8.5
-- Node.js 24.17.0, 22.23.0 (armv7l)
+- Node.js 24.18.0, 22.23.1 (armv7l)
 - Yarn 1.22.22
 
 ### `resolute`, `2604`
 
 - Ubuntu 26.04 (resolute)
 - PHP 5.6 to PHP 8.5
-- Node.js 24.17.0, 22.23.0 (armv7l)
+- Node.js 24.18.0, 22.23.1 (armv7l)
 - Yarn 1.22.22
 
 ### `noble`, `2404`
 
 - Ubuntu 24.04 (noble)
 - PHP 5.6 to PHP 8.5
-- Node.js 24.17.0, 22.23.0 (armv7l)
+- Node.js 24.18.0, 22.23.1 (armv7l)
 - Yarn 1.22.22
 
 ### `jammy`, `2204`
 
 - Ubuntu 22.04 (jammy)
 - PHP 5.6 to PHP 8.5
-- Node.js 24.17.0, 22.23.0 (armv7l)
+- Node.js 24.18.0, 22.23.1 (armv7l)
 - Yarn 1.22.22
 
 ### `latest-slim`
 
 - Ubuntu 24.04 (noble), Debian 12 (bookworm)
-- Node.js 24.17.0, 22.23.0 (armv7l)
+- Node.js 24.18.0, 22.23.1 (armv7l)
 - Yarn 1.22.22
 
 ### `trixie-slim`, `13-slim`
 
 - Debian 13 (trixie)
-- Node.js 24.17.0, 22.23.0 (armv7l)
+- Node.js 24.18.0, 22.23.1 (armv7l)
 - Yarn 1.22.22
 
 ### `resolute-slim`, `2604-slim`
 
 - Ubuntu 26.04 (resolute)
-- Node.js 24.17.0, 22.23.0 (armv7l)
+- Node.js 24.18.0, 22.23.1 (armv7l)
 - Yarn 1.22.22
 
 ### `noble-slim`, `2404-slim`
 
 - Ubuntu 24.04 (noble)
-- Node.js 24.17.0, 22.23.0 (armv7l)
+- Node.js 24.18.0, 22.23.1 (armv7l)
 - Yarn 1.22.22
 
 ### `jammy-slim`, `2204-slim`
 
 - Ubuntu 22.04 (jammy)
-- Node.js 24.17.0, 22.23.0 (armv7l)
+- Node.js 24.18.0, 22.23.1 (armv7l)
 - Yarn 1.22.22
 
 ### PHP version specific tags
