@@ -13,7 +13,6 @@ on:
           - all
           - trixie
           - bookworm
-          - bullseye
 
 jobs:
   build-debian:

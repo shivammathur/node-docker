@@ -3,7 +3,6 @@ set -euo pipefail
 declare -A base_map=(
   [trixie]='debian:13'
   [bookworm]='debian:12'
-  [bullseye]='debian:11'
   [resolute]='ubuntu:26.04'
   [noble]='ubuntu:24.04'
   [jammy]='ubuntu:22.04'
@@ -14,8 +13,6 @@ declare -A version_map=(
   [13]='trixie'
   [bookworm]='bookworm'
   [12]='bookworm'
-  [bullseye]='bullseye'
-  [11]='bullseye'
   [resolute]='resolute'
   [2604]='resolute'
   [26.04]='resolute'
@@ -53,14 +50,12 @@ tag_specs=(
   "latest|noble|full|"
   "trixie,13|trixie|full|"
   "bookworm,12|bookworm|full|"
-  "bullseye,11|bullseye|full|"
   "resolute,2604,26.04|resolute|full|"
   "noble,2404,24.04|noble|full|"
   "jammy,2204,22.04|jammy|full|"
   "latest-slim|noble|slim|"
   "trixie-slim,13-slim|trixie|slim|"
   "bookworm-slim,12-slim|bookworm|slim|"
-  "bullseye-slim,11-slim|bullseye|slim|"
   "resolute-slim,2604-slim,26.04-slim|resolute|slim|"
   "noble-slim,2404-slim,24.04-slim|noble|slim|"
   "jammy-slim,2204-slim,22.04-slim|jammy|slim|"
@@ -68,7 +63,7 @@ tag_specs=(
 
 php_versions=(5.6 7.0 7.1 7.2 7.3 7.4 8.0 8.1 8.2 8.3 8.4 8.5)
 for php_version in "${php_versions[@]}"; do
-  for distro in resolute noble jammy trixie bookworm bullseye; do
+  for distro in resolute noble jammy trixie bookworm; do
     base="${base_map[$distro]}"
     vendor="${base%%:*}"
     version="${base#*:}"
