@@ -66,6 +66,7 @@ jobs:
         if: matrix.platform == 'multi' && steps.prep.outcome == 'success'
         uses: docker/build-push-action@v6
         with:
+          context: .
           push: true
           file: ./Dockerfile_${{ matrix.file }}
           platforms: ${{ steps.prep.outputs.multi }}
@@ -80,6 +81,7 @@ jobs:
         if: matrix.platform != 'multi' && steps.prep.outcome == 'success'
         uses: docker/build-push-action@v6
         with:
+          context: .
           push: true
           file: ./Dockerfile_${{ matrix.file }}
           platforms: ${{ matrix.platform }}
