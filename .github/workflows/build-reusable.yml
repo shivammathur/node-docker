@@ -48,13 +48,14 @@ jobs:
           FILE: ${{ matrix.file }}
           MULTI: ${{ matrix.multi }}
 
-      - name: Set up Docker Buildx
-        if: steps.prep.outcome == 'success'
-        uses: docker/setup-buildx-action@v3
-
+      # Register emulators before BuildKit detects and caches supported platforms.
       - name: Set up QEMU
         if: steps.prep.outcome == 'success'
         uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        if: steps.prep.outcome == 'success'
+        uses: docker/setup-buildx-action@v3
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
